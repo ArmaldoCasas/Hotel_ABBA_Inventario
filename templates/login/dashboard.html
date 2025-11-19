@@ -1,9 +1,77 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard - Hotel ABBA{% endblock %}
 
+{% block styles %}
+<style>
+    .kpi { padding: 20px; border-radius: 8px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .kpi h3 { margin: 0; color: #006633; }
+</style>
+{% endblock styles %}
+
 {% block content %}
-<div class="container mt-4">
-    <h2>Bienvenido, {{ request.user.get_username }}!</h2>
-    <p>Has iniciado sesión correctamente.</p>
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4">Dashboard</h1>
+        <div>Hola, <strong>{{ request.session.usuario_nombre|default:'Invitado' }}</strong></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Productos con poco stock</h5>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr><th>Producto</th><th>Stock</th><th>Ubicación</th><th>umbral</th></tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Últimos movimientos</h5>
+                    <table class="table table-sm">
+                        <thead><tr><th>Fecha</th><th>Tipo</th><th>Producto</th><th>Cantidad</th></tr></thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<!-- Modal reponer -->
+<div class="modal fade" id="replenishModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reponer producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="replenishForm">
+                    <div class="mb-3">
+                        <label class="form-label">Producto</label>
+                        <input type="text" id="modalProduct" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cantidad</label>
+                        <input type="number" id="modalQuantity" class="form-control" min="1" value="1">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="submitReplenish()">Reponer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}

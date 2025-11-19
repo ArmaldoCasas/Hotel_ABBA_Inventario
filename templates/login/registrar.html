@@ -4,34 +4,38 @@
 {% block styles %}
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock styles %}
+{% block navbar %}{% endblock navbar %}
 {% block content %}
-<div class="login-container mx-auto">
-    <div class="card">
-        <div class="card-header">
-            <img src="{% static 'img/abba-hotels-logo.jpg' %}" alt="Hotel ABBA" class="hotel-logo">
-            <h4 class="mb-0">Hotel ABBA</h4>
-            <p class="text-muted">Sistema de Inventario</p>
-        </div>
-        <div class="card-body p-4">
+<div class="d-flex justify-content-center align-items-center vh-100" style="background: linear-gradient(135deg,#f4f9f4,#e9f2ec);">
+    <div class="card shadow-sm" style="width:380px;">
+        <div class="card-body">
+            <div class="text-center mb-3">
+                <img src="{% static 'img/abba-hotels-logo.jpg' %}" alt="Hotel ABBA" style="height:60px;">
+                <h5 class="mt-2">Crear cuenta</h5>
+                <small class="text-muted">Regístrate para gestionar inventario</small>
+            </div>
+
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-danger">
-                        {{ message }}
-                    </div>
+                    <div class="alert alert-danger">{{ message }}</div>
                 {% endfor %}
             {% endif %}
+
             <form method="post">
                 {% csrf_token %}
-                <div class="mb-3">
+                <div class="mb-2">
                     <label for="username" class="form-label">Usuario</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="ej: juan.perez" required>
                 </div>
-                <div class="mb-3">
+
+                <div class="mb-2">
                     <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="mínimo 8 caracteres" required>
                 </div>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-login">Registrar</button>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <a href="login" class="text-decoration-none">¿Ya tienes cuenta? Inicia sesión</a>
+                    <button type="submit" class="btn btn-success">Registrar</button>
                 </div>
             </form>
         </div>
