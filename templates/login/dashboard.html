@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Hotel ABBA{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Bienvenido, {{ request.user.get_username }}!</h2>
+    <p>Has iniciado sesión correctamente.</p>
+</div>
+{% endblock content %}
