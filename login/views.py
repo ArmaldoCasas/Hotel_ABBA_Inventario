@@ -1,6 +1,16 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+
+
+
+def create_user_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = User.objects.create_user(username, "", password)
+    return render(request, 'login/registrar.html')
 
 def login_view(request):
     if request.method == 'POST':
