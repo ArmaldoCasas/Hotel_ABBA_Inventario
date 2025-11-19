@@ -1,5 +1,12 @@
 from django.db import models
 
+# Unidades permitidas para los productos
+UNIT_CHOICES = [
+    ('ml', 'ml'),
+    ('kg', 'kg'),
+]
+
+
 class Categoria(models.Model):
     nombre = models.CharField(max_length=50)
     def __str__(self):
@@ -16,7 +23,10 @@ class Proveedor(models.Model):
 
 class Producto(models.Model):
     nombre = models.CharField(max_length=200)
-    unidad = models.CharField(max_length=50) 
+    unidad = models.CharField(max_length=50, choices=UNIT_CHOICES, default='kg') 
+    precio = models.PositiveIntegerField(default=0)
+    # Umbral mínimo para alertar bajo stock
+    umbral = models.FloatField(default=5)
     stock = models.FloatField(default=0)
     ubicacion = models.CharField(max_length=100, blank=True, null=True)
     categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True,)

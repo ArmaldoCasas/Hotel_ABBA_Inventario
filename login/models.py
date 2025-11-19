@@ -3,17 +3,23 @@ from django.contrib.auth.hashers import make_password, check_password
 
 # Create your models here.
 
-class roles(models.Model):
-    nombre_rol = models.CharField(max_length=20, unique=True)
-    descripcion = models.TextField()
+class Roles(models.Model):
+    ROLE_CHOICES = [
+        ('Administrador', 'Administrador'),
+        ('Usuario', 'Usuario'),
+        ('Jefe Bodega', 'Jefe Bodega'),
+    ]
+
+    nombre_rol = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Usuario', unique=True)
+    descripcion = models.TextField(blank=True)
 
     def __str__(self):
         return self.nombre_rol
 
-class usuarios(models.Model):
+class Usuarios(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     contraseña = models.CharField(max_length=128)  # contraseña hasheada
-    rol = models.ForeignKey(roles, on_delete=models.CASCADE, related_name='usuarios')
+    rol = models.ForeignKey(Roles, on_delete=models.CASCADE, related_name='usuarios', null=True, blank=True)
 
     def __str__(self):
         return self.nombre
