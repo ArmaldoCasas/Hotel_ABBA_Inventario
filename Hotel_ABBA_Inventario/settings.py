@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -77,12 +78,12 @@ WSGI_APPLICATION = 'Hotel_ABBA_Inventario.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "Hotel_Database",
-        "USER": "postgres",
-        "PASSWORD":"contraseña",
-        "HOST":"localhost",
-        "PORT":"5432"
+        'ENGINE': config('MI_ENGINE'),
+        'NAME': config("MI_NAME"),
+        "USER": config("MI_USER"),
+        "PASSWORD":config("MI_PASSWORD"),
+        "HOST":config("MI_HOST"),
+        "PORT":config("MI_PORT")
     }
 }
 
