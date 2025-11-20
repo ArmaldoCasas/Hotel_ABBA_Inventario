@@ -10,10 +10,10 @@ def Agregar_Productos(request):
             return redirect("agregar_productos")    
     else:
         formulario_productos=ProductoForm()
-    return render(request, "Productos/agregar_productos.html", {"formulario_productos":formulario_productos})
+    return render(request, "productos/agregar_productos.html", {"formulario_productos":formulario_productos})
 def listado_productos(request):
     Productos = Producto.objects.all() 
-    return render(request,"Productos/listado_productos.html",{
+    return render(request,"productos/listado_productos.html",{
         "titulo":"Listado de Productos",
         "Productos": Productos 
     })
@@ -28,10 +28,10 @@ def agregar_categorias(request):
     else:
         formulario_categorias = CategoriaForm()
     
-    return render(request, 'Productos/agregar_categorias.html', {'formulario_categorias': formulario_categorias})
+    return render(request, 'productos/agregar_categorias.html', {'formulario_categorias': formulario_categorias})
 def listado_categorias(request):
     Categorias = Categoria.objects.all() 
-    return render(request,"Productos/listado_categorias.html",{
+    return render(request,"productos/listado_categorias.html",{
         "titulo":"Listado de Productos",
         "Categorias": Categorias 
     })
@@ -45,10 +45,10 @@ def agregar_proveedores(request):
     else:
         formulario_proveedores = ProveedorForm()
     
-    return render(request, 'Productos/agregar_proveedores.html', {'formulario_proveedores': formulario_proveedores})
+    return render(request, 'productos/agregar_proveedores.html', {'formulario_proveedores': formulario_proveedores})
 def listado_proveedores(request):
     Proveedores = Proveedor.objects.all() 
-    return render(request,"Productos/listado_proveedores.html",{
+    return render(request,"productos/listado_proveedores.html",{
         "titulo":"Listado de Productos",
         "Proveedor": Proveedores 
     })
