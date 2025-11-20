@@ -15,13 +15,16 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Telefono</th>
-                    <th>Email</th>
-                    <th>Direccion</th>
-                    <th>Descripcion</th>
+                    <th>Nombre de las categorias</th>
                 </tr>
             </thead>
+            <tbody>
+                {% for categoria  in Categorias  %}
+                </tr>
+                <td>{{categoria.nombre}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
 
 </div>
 {% endblock %}
