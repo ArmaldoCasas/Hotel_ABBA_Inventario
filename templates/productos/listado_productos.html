@@ -19,6 +19,7 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
+                    <th>Cantidad</th>
                     <th>Unidad</th>
                     <th>Precio</th>
                     <th>Umbral</th>
@@ -32,6 +33,7 @@
                 {% for prod  in Productos  %}
                 <tr>
                 <td>{{prod.nombre}}</td>
+                <td>{{prod.cantidad}}</td>
                 <td>{{prod.unidad}}</td>
                 <td>{{prod.precio}}</td>
                 <td>{{prod.umbral}}</td>

@@ -10,6 +10,14 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nombre
 
+    def get_unidad_display_full(self):
+        if self.unidad == 'kg':
+            return 'kilogramos'
+        elif self.unidad == 'ml':
+            return 'litros'
+        else:
+            return self.unidad
+
 class Proveedor(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     telefono = models.CharField(max_length=50)
@@ -21,6 +29,7 @@ class Proveedor(models.Model):
 
 class Producto(models.Model):
     nombre = models.CharField(max_length=200, unique=True)
+    cantidad = models.FloatField(default=0)
     unidad = models.CharField(max_length=50, choices=UNIT_CHOICES, default='kg') 
     precio = models.PositiveIntegerField(default=0)
     # Umbral mínimo para alertar bajo stock
