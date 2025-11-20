@@ -9,7 +9,7 @@ class Ingreso(models.Model):
         ('BOLETA', 'Boleta'),
     ]
     tipo_documento = models.CharField(max_length=20, choices=TIPO_DOCUMENTO_CHOICES)
-    numero_documento = models.CharField(max_length=50)
+    numero_documento = models.CharField(max_length=50, unique=True)
     fecha = models.DateTimeField(auto_now_add=True)
     productos = models.ManyToManyField('Productos.Producto',through='MovimientoIngreso',related_name='ingresos')
     def __str__(self):

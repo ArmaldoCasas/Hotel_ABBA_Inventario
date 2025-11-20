@@ -19,13 +19,43 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Productos con poco stock</h5>
-                    <table class="table table-sm">
-                        <thead>
-                            <tr><th>Producto</th><th>Stock</th><th>Ubicación</th><th>umbral</th></tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+ <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Unidad</th>
+                    <th>Precio</th>
+                    <th>Umbral</th>
+                    <th>Stock</th>
+                    <th>Ubicacion </th>
+                    <th>Categoria</th>
+                    <th>Proveedores</th>
+                </tr>
+            </thead>
+                    <tbody>
+                {% for prod  in Productos  %}
+                {% if prod.stock < prod.umbral %}
+                <tr>
+                <td>{{prod.nombre}}</td>
+                <td>{{prod.unidad}}</td>
+                <td>{{prod.precio}}</td>
+                <td>{{prod.umbral}}</td>
+                <td>{{prod.stock}}</td>
+                <td>{{prod.ubicacion}}</td>
+                <td>{{prod.categoria}}</td>
+                 <td>
+                        {% for prov in prod.proveedores.all %}
+                            {{ prov.nombre }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+</div>
                 </div>
             </div>
         </div>

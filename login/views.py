@@ -1,4 +1,5 @@
 from login.models import Usuarios
+from Productos.models import Producto
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
@@ -39,4 +40,7 @@ def logout_view(request):
     return redirect('login')
 
 def dashboard_view(request):
-    return render(request, 'login/dashboard.html')
+    Productos = Producto.objects.all() 
+    return render(request, 'login/dashboard.html',{
+        "Productos": Productos 
+    })
