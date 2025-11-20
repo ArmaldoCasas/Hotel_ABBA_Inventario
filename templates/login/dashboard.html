@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Productos con poco stock</h5>
  <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -35,16 +35,16 @@
             </thead>
                     <tbody>
                 {% for prod  in Productos  %}
-                {% if prod.stock < prod.umbral %}
-                <tr>
-                <td>{{prod.nombre}}</td>
-                <td>{{prod.unidad}}</td>
-                <td>{{prod.precio}}</td>
-                <td>{{prod.umbral}}</td>
-                <td>{{prod.stock}}</td>
-                <td>{{prod.ubicacion}}</td>
-                <td>{{prod.categoria}}</td>
-                 <td>
+                    <tr{% if prod.stock < prod.umbral  %} class ="table-danger" >
+                
+                    <td>{{prod.nombre}}</td>
+                    <td>{{prod.unidad}}</td>
+                    <td>{{prod.precio}}</td>
+                    <td>{{prod.umbral}}</td>
+                    <td>{{prod.stock}}</td>
+                    <td>{{prod.ubicacion}}</td>
+                    <td>{{prod.categoria}}</td>
+                    <td>
                         {% for prov in prod.proveedores.all %}
                             {{ prov.nombre }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
