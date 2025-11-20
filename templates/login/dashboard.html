@@ -24,6 +24,7 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
+                    <th>Cantidad</th>
                     <th>Unidad</th>
                     <th>Precio</th>
                     <th>Umbral</th>
@@ -35,6 +36,17 @@
             </thead>
                     <tbody>
                 {% for prod  in Productos  %}
+                {% if prod.stock < prod.umbral %}
+                <tr>
+                <td>{{prod.nombre}}</td>
+                <td>{{prod.cantidad}}</td>
+                <td>{{prod.unidad}}</td>
+                <td>{{prod.precio}}</td>
+                <td>{{prod.umbral}}</td>
+                <td>{{prod.stock}}</td>
+                <td>{{prod.ubicacion}}</td>
+                <td>{{prod.categoria}}</td>
+                 <td>
                     <tr{% if prod.stock < prod.umbral  %} class ="table-danger" >
                 
                     <td>{{prod.nombre}}</td>

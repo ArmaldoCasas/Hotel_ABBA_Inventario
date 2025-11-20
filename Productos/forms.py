@@ -10,7 +10,7 @@ class ProductoForm(forms.ModelForm):
     )
     class Meta:
         model = Producto
-        fields = ['nombre', 'unidad', 'precio', 'umbral', 'stock', 'ubicacion', 'categoria']
+        fields = ['nombre', 'cantidad', 'unidad', 'precio', 'umbral', 'stock', 'ubicacion', 'categoria']
     def save(self, commit=True):
         # 1. Guardar la instancia del Producto 
         producto = super().save(commit=False)
