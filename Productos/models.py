@@ -20,7 +20,7 @@ class Proveedor(models.Model):
         return self.nombre
 
 class Producto(models.Model):
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200, unique=True)
     unidad = models.CharField(max_length=50, choices=UNIT_CHOICES, default='kg') 
     precio = models.PositiveIntegerField(default=0)
     # Umbral mínimo para alertar bajo stock

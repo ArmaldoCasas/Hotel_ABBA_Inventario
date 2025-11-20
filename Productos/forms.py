@@ -11,6 +11,30 @@ class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
         fields = ['nombre', 'unidad', 'precio', 'umbral', 'stock', 'ubicacion', 'categoria']
+    def save(self, commit=True):
+        # 1. Guardar la instancia del Producto (sin la relación M2M aún)
+        producto = super().save(commit=False)
+
+        if commit:
+            producto.save()
+
+        if commit:
+            # 2. Guardar la relación Muchos a Muchos manualmente
+            proveedores = self.cleaned_data.get('proveedores_seleccionados')
+            
+            # Limpiamos relaciones anteriores
+            ProveedorProducto.objects.filter(producto=producto).delete()
+
+            # Creamos las nuevas relaciones
+            # Es buena práctica verificar si 'proveedores' no es None
+            if proveedores:
+                for proveedor in proveedores:
+                    ProveedorProducto.objects.create(
+                        producto=producto,
+                        proveedor=proveedor
+                    )
+
+        return producto
 
 class CategoriaForm(forms.ModelForm):
     class Meta:
