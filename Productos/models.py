@@ -5,8 +5,6 @@ UNIT_CHOICES = [
     ('ml', 'ml'),
     ('kg', 'kg'),
 ]
-
-
 class Categoria(models.Model):
     nombre = models.CharField(max_length=50)
     def __str__(self):

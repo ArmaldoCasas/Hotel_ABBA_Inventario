@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Nueva Proveedor - Hotel ABBA{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Agregar Nueva Proveedor</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ formulario_proveedores.as_p}}
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Guardar Proveedor</button>
+            <a href="{% url 'listado_proveedores' %}" class="btn btn-secondary">Volver</a>
+
+        </div>
+    </form>
+</div>
+{% endblock %}

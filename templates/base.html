@@ -12,31 +12,15 @@
 </head>
 <body class="h-100"> 
         {% block navbar %}
-        <style>
-            .sidebar {
-                width: 250px;
-                height: 100vh;
-                position: fixed;
-                left: 0;
-                top: 0;
-                background-color: #003366;
-                padding: 16px;
-                overflow-y: auto;
-            }
-            .sidebar .logo { color: #fff; font-weight:700; margin-bottom:16px; }
-            .sidebar .menu { list-style:none; padding:0; }
-            .sidebar .menu a { color:#fff; display:block; padding:8px 12px; text-decoration:none; border-radius:4px; }
-            .sidebar .menu a:hover, .sidebar .menu a.active { background:#006633; }
-            .main-with-sidebar { margin-left: 250px; padding: 16px; }
-        </style>
+        <link rel="stylesheet" href="{% static 'css/basehtml.css' %}">
         <aside class="sidebar">
             <div class="logo">Hotel ABBA</div>
             <ul class="menu">
                 <li><a href="/">Inicio</a></li>
-                <li><a href="/productos/">Productos</a></li>
+                <li><a href="Productos/listado_productos">Productos</a></li>
                 <li><a href="/movimientos/">Movimientos</a></li>
-                <li><a href="/proveedores/">Proveedores</a></li>
-                <li><a href="/categorias/">Categorías</a></li>
+                <li><a href="Productos/listado_proveedores">Proveedores</a></li>
+                <li><a href="Productos/listado_categorias">Categorías</a></li>
                 <li><a href="/usuarios/">Usuarios</a></li>
                 <li><a href="/reportes/">Reportes</a></li>
             </ul>
