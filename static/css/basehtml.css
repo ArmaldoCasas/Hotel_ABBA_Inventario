@@ -1,0 +1,14 @@
+.sidebar {
+width: 250px;
+height: 100vh;
+position: fixed;
+left: 0;
+top: 0;
+background-color: #003366;
+padding: 16px;
+overflow-y: auto;}
+.sidebar .logo { color: #fff; font-weight:700; margin-bottom:16px; }
+.sidebar .menu { list-style:none; padding:0; }
+.sidebar .menu a { color:#fff; display:block; padding:8px 12px; text-decoration:none; border-radius:4px; }
+.sidebar .menu a:hover, .sidebar .menu a.active { background:#006633; }
+.main-with-sidebar { margin-left: 250px; padding: 16px; }

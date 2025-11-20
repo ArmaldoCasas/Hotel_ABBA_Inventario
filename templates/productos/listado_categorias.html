@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Crear/Editar Producto - Hotel ABBA{% endblock %}
+{% block content %}
+<div class="main-content">
+  <h1>Crear / Editar Producto</h1>
+
+  <div class="container mt-4">
+    <h2>Inventario</h2>
+    
+    <div class="mb-3">
+        <a href={% url "agregar_categorias" %} class="btn btn-primary">Agregar Item</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Telefono</th>
+                    <th>Email</th>
+                    <th>Direccion</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+
+</div>
+{% endblock %}
