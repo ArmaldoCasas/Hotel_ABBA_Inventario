@@ -9,6 +9,11 @@ def create_user_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        # Evitar duplicados: comprobar si ya existe el usuario para que no de error de pagina
+        if Usuarios.objects.filter(nombre=username).exists():
+            messages.error(request, 'El nombre de usuario ya existe')
+            return redirect('registrar')
+
         user = Usuarios(nombre=username)
         user.set_password(password)
         user.save()
