@@ -138,5 +138,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-##HOSTNAME = config('HOSTNAME')
-##CSRF_TRUSTED_ORIGINS = [f"{HOSTNAME}"]
+HOSTNAME = config('HOSTNAME')
+CSRF_TRUSTED_ORIGINS = [f"{HOSTNAME}"]
