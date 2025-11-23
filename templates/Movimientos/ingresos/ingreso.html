@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Registrar Ingreso - Hotel ABBA{% endblock %}
+
+{% block content %}
+<h1>Registrar Ingreso</h1>
+{% if not ingreso_id %}
+<div class="alert alert-warning" role="alert">
+  Para poder agregar productos, primero debe guardar los datos iniciales del ingreso haciendo clic en <strong>Guardar Datos</strong>.
+</div>
+{% endif %}
+<form method="post" novalidate>
+  {% csrf_token %}
+  <h3>Datos de ingreso</h3>
+  <div class="mb-3">
+    {{ form_ingreso.proveedor.label_tag }}
+    {{ form_ingreso.proveedor }}
+    {% if form_ingreso.proveedor.errors %}
+      <div class="text-danger">{{ form_ingreso.proveedor.errors }}</div>
+    {% endif %}
+  </div>
+  <div class="mb-3">
+    {{ form_ingreso.tipo_documento.label_tag }}
+    {{ form_ingreso.tipo_documento }}
+    {% if form_ingreso.tipo_documento.errors %}
+      <div class="text-danger">{{ form_ingreso.tipo_documento.errors }}</div>
+    {% endif %}
+  </div>
+  <div class="mb-3">
+    {{ form_ingreso.numero_documento.label_tag }}
+    {{ form_ingreso.numero_documento }}
+    {% if form_ingreso.numero_documento.errors %}
+      <div class="text-danger">{{ form_ingreso.numero_documento.errors }}</div>
+    {% endif %}
+  </div>
+  {% if ingreso_id and ingreso_id != None %}
+  <a href="{% url 'movimiento_ingreso' ingreso_id=ingreso_id %}" class="btn btn-primary mb-3">Agregar producto</a>
+  {% else %}
+  <a href="#" class="btn btn-primary mb-3 disabled" tabindex="-1" aria-disabled="true" title="Guarde los datos primero para agregar productos">Agregar producto</a>
+  {% endif %}
+  <button name="guardar_datos_ingreso" class="btn btn-secondary" type="submit">Guardar Datos</button>
+</form>
+
+{% if movimientos %}
+<hr>
+<h3>Productos agregados</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Producto</th>
+      <th>Cantidad</th>
+      <th>Precio Unitario</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for mov in movimientos %}
+    <tr>
+      <td>{{ mov.producto_nombre }}</td>
+      <td>{{ mov.cantidad }}</td>
+      <td>{{ mov.precio_unitario }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<form method="post" style="display:inline">
+  {% csrf_token %}
+  <button name="guardar_ingreso" class="btn btn-success" type="submit">Guardar Ingreso</button>
+</form>
+{% endif %}
+{% endblock %}

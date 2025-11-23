@@ -17,11 +17,11 @@
             <div class="logo">Hotel ABBA</div>
             <ul class="menu">
                 <li><a href="/">Inicio</a></li>
-                <li><a href= "{% url "dashboard" %}">Dashboard</a></li>
-                <li><a href= "{% url "listado_productos" %}">Productos</a></li>
-                <li><a href="/movimientos/">Movimientos</a></li>
-                <li><a href="{% url "listado_proveedores" %}">Proveedores</a></li>
-                <li><a href="{% url "listado_categorias" %}">Categorías</a></li>
+                <li><a href= "{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href= "{% url 'listado_productos' %}">Productos</a></li>
+                <li><a href="{% url 'listado_movimientos' %}">Movimientos</a></li>
+                <li><a href="{% url 'listado_proveedores' %}">Proveedores</a></li>
+                <li><a href="{% url 'listado_categorias' %}">Categorías</a></li>
                 <li><a href="/usuarios/">Usuarios</a></li>
                 <li><a href="/reportes/">Reportes</a></li>
             </ul>
@@ -38,5 +38,4 @@
     {% block scripts %}
     {% endblock scripts %}
 </body>
-</html>
 </html>
