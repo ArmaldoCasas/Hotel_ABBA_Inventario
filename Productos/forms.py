@@ -6,11 +6,22 @@ class ProductoForm(forms.ModelForm):
         queryset=Proveedor.objects.all(),
         widget=forms.CheckboxSelectMultiple,
         label="Proveedores",
+        required=False
     )
     
     class Meta:
         model = Producto
         fields = ['nombre', 'contenido', 'unidad', 'precio', 'umbral', 'stock', 'ubicacion', 'categoria']
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'contenido': forms.NumberInput(attrs={'class': 'form-control'}),
+            'unidad': forms.Select(attrs={'class': 'form-select'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control'}),
+            'umbral': forms.NumberInput(attrs={'class': 'form-control'}),
+            'stock': forms.NumberInput(attrs={'class': 'form-control'}),
+            'ubicacion': forms.Select(attrs={'class': 'form-select'}),
+            'categoria': forms.Select(attrs={'class': 'form-select'}),
+        }
     
     def save(self, commit=True):
         # 1. Guardar la instancia del Producto 
