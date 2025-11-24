@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Detalle Movimiento Salida - Hotel ABBA{% endblock %}
+
+{% block content %}
+<h1>Detalle de Salida: #{{ salida.id }}</h1>
+<p><strong>Motivo:</strong> {{ salida.motivo }}</p>
+<p><strong>Fecha:</strong> {{ salida.fecha }}</p>
+
+<h2>Productos</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Producto</th>
+      <th>Cantidad</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for movimiento in movimientos %}
+    <tr>
+      <td>{{ movimiento.producto.nombre }}</td>
+      <td>{{ movimiento.cantidad }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a href="{% url 'listado_movimientos' %}" class="btn btn-secondary">Volver al listado</a>
+{% endblock %}

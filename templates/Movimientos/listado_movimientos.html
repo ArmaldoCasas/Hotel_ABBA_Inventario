@@ -7,6 +7,8 @@
     <a href="{% url 'ingreso' %}" class="btn btn-success">Agregar Ingreso</a>
     <a href="{% url 'salida' %}" class="btn btn-danger">Agregar Salida</a>
   </div>
+
+  <h2>Movimientos de Ingreso</h2>
   <table class="table">
     <thead>
       <tr>
@@ -18,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for movimiento in Movimientos %}
+      {% for movimiento in Movimientos_Ingreso %}
       <tr>
         <td>{{ movimiento.id }}</td>
         <td>{{ movimiento.tipo_documento }}</td>
@@ -28,8 +30,40 @@
           <a href="{% url 'detalle_movimiento_ingreso' movimiento.id %}" class="btn btn-primary btn-sm">Detalle</a>
         </td>
       </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center">No hay movimientos de ingreso</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2 class="mt-5">Movimientos de Salida</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Motivo</th>
+        <th>Fecha</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for movimiento in Movimientos_Salida %}
+      <tr>
+        <td>{{ movimiento.id }}</td>
+        <td>{{ movimiento.motivo }}</td>
+        <td>{{ movimiento.fecha }}</td>
+        <td>
+          <a href="{% url 'detalle_movimiento_salida' movimiento.id %}" class="btn btn-primary btn-sm">Detalle</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center">No hay movimientos de salida</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
-{% endblock content %}
+{% endblock %}
