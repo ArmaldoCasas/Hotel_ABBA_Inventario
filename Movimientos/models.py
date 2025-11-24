@@ -14,9 +14,11 @@ class Ingreso(models.Model):
     productos = models.ManyToManyField('Productos.Producto',through='MovimientoIngreso',related_name='ingresos')
     def __str__(self):
         return f"Ingreso #{self.id} - {self.numero_documento}"
+
 class MovimientoIngreso(models.Model):
     ingreso = models.ForeignKey(Ingreso, on_delete=models.CASCADE)
     producto = models.ForeignKey('Productos.Producto', on_delete=models.PROTECT)
+    # Se mantiene DecimalField para mayor precisión en cantidades y precios
     cantidad = models.DecimalField(max_digits=10, decimal_places=2)
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     def __str__(self):
