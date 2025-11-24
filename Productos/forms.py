@@ -1,5 +1,5 @@
 from django import forms
-from .models import Producto, Proveedor, ProveedorProducto,Categoria
+from .models import Producto, Proveedor, ProveedorProducto,Categoria, Ubicacion
 
 
 class ProductoForm(forms.ModelForm):
@@ -51,4 +51,12 @@ class ProveedorForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'contacto@empresa.com'}),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Dirección'}),
             'descripcion': forms.TextInput(attrs={'class': 'form-control', 'rows':2, 'placeholder': 'Descripcion'}),
+        }
+
+class UbicacionForm(forms.ModelForm):
+    class Meta:
+        model = Ubicacion
+        fields = ['nombre']
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ubicación'}),
         }

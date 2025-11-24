@@ -35,7 +35,7 @@ class Producto(models.Model):
     # Umbral mínimo para alertar bajo stock
     umbral = models.FloatField(default=5)
     stock = models.FloatField(default=0)
-    ubicacion = models.CharField(max_length=100, blank=True, null=True)
+    ubicacion = models.ForeignKey('Ubicacion', on_delete=models.SET_NULL, null=True)
     categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True,)
     proveedores = models.ManyToManyField(
         'Proveedor',
@@ -50,3 +50,9 @@ class ProveedorProducto(models.Model) :
     producto = models.ForeignKey('Producto', on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.proveedor.nombre} suministra {self.producto.nombre}"
+
+class Ubicacion(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)
+    
+    def __str__(self):
+        return self.nombre

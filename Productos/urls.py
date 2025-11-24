@@ -7,4 +7,6 @@ urlpatterns = [
     path("listado_proveedores/",listado_proveedores,name="listado_proveedores"),
     path("listado_categorias/",listado_categorias,name="listado_categorias"),
     path('agregar_categorias/', agregar_categorias, name='agregar_categorias'),
-    path('agregar_proveedores/', agregar_proveedores, name='agregar_proveedores'),]
+    path('agregar_proveedores/', agregar_proveedores, name='agregar_proveedores'),
+    path('agregar_ubicacion/', agregar_ubicacion, name='agregar_ubicacion'),
+    path('listado_ubicacion/', listado_ubicacion, name='listado_ubicacion'),]

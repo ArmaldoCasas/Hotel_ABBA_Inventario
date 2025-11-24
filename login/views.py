@@ -1,4 +1,4 @@
-from login.models import Usuarios
+from login.models import Usuarios, Roles
 from Productos.models import Producto
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -6,6 +6,10 @@ from django.contrib import messages
 # Create your views here.
 
 def create_user_view(request):
+    #if not 9 in request.session.get('permisos'):
+    #    messages.error(request, 'No tienes permisos para crear usuarios')
+    #    return redirect('inicio')
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -42,6 +46,12 @@ def login_view(request):
                 request.session['user_id'] = user.id
             else:
                 request.session['user_id'] = None
+            
+            # Guardar el nombre del usuario en la sesión
+            if user.nombre:
+                request.session['user_name'] = user.nombre
+            else:
+                request.session['user_name'] = None
 
             return redirect('inicio')
         else:
@@ -59,7 +69,8 @@ def dashboard_view(request):
         return redirect('inicio')    
     Productos = Producto.objects.all() 
     return render(request, 'login/dashboard.html',{
-        "Productos": Productos 
+        "Productos": Productos,
+        "user_name": request.session.get('user_name') 
     })
 
 def inicio_view(request):
@@ -68,3 +79,15 @@ def inicio_view(request):
         return redirect('login')
     
     return render(request, 'inicio.html')
+
+def listado_usuarios(request):
+    if not request.session.get('user_id'):
+        return redirect('login')
+    
+    # Aquí podrías agregar validación de permisos si es necesario
+    if not 8 in request.session.get('permisos'):
+        messages.error(request, 'No tienes permisos para acceder a esta pagina')
+        return redirect('inicio')
+    
+    usuarios = Usuarios.objects.all()
+    return render(request, 'login/listado_usuarios.html', {'usuarios': usuarios})

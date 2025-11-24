@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Listado de Ubicaciones - Hotel ABBA{% endblock %}
+{% block content %}
+<div class="main-content">
+  <h1>Listado de Ubicaciones</h1>
+
+  <div class="container mt-4">
+    <h2>Ubicaciones</h2>
+    
+    <div class="mb-3">
+        <a href={% url "agregar_ubicacion" %} class="btn btn-primary">Agregar Ubicación</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre de las ubicaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ubicacion  in Ubicaciones  %}
+                </tr>
+                <td>{{ubicacion.nombre}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
