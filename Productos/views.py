@@ -73,9 +73,10 @@ def listado_categorias(request):
     if not 4 in request.session.get('permisos'):
         return redirect('inicio')
 
+    # Obtener categorías
     Categorias = Categoria.objects.all() 
     return render(request,"productos/listado_categorias.html",{
-        "titulo":"Listado de Productos",
+        "titulo":"Listado de Categorías",
         "Categorias": Categorias 
     })
 
@@ -108,9 +109,10 @@ def listado_proveedores(request):
     if not 6 in request.session.get('permisos'):
         return redirect('inicio')
 
+    # Obtener proveedores
     Proveedores = Proveedor.objects.all() 
     return render(request,"productos/listado_proveedores.html",{
-        "titulo":"Listado de Productos",
+        "titulo":"Listado de Proveedores",
         "Proveedor": Proveedores 
     })
 
@@ -141,7 +143,8 @@ def listado_ubicacion(request):
     if not 8 in request.session.get('permisos'):
         return redirect('inicio')
 
-    Ubicaciones = Ubicacion.objects.all() 
+    # Obtener ubicaciones con prefetch de productos
+    Ubicaciones = Ubicacion.objects.prefetch_related('producto_set').all() 
     return render(request,"productos/listado_ubicacion.html",{
         "titulo":"Listado de Ubicaciones",
         "Ubicaciones": Ubicaciones 

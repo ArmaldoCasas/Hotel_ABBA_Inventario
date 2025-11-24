@@ -1,38 +1,55 @@
 {% extends "base.html" %}
-{% block title %}Crear/Editar Producto - Hotel ABBA{% endblock %}
+{% block title %}Listado de Proveedores - Hotel ABBA{% endblock %}
 {% block content %}
 <div class="main-content">
-  <h1>Ver Proveedores</h1>
+  <h1>Listado de Proveedores</h1>
 
   <div class="container mt-4">
-    <h2>Inventario</h2>
+    <h2>Proveedores</h2>
     
     <div class="mb-3">
-        <a href={% url "agregar_proveedores" %} class="btn btn-primary">Agregar Item</a>
+        <a href={% url "agregar_proveedores" %} class="btn btn-primary">Agregar Proveedor</a>
     </div>
 
     <div class="table-responsive">
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Telefono</th>
+                    <th>Teléfono</th>
                     <th>Email</th>
-                    <th>Direccion</th>
-                    <th>Descripcion</th>
+                    <th>Dirección</th>
+                    <th>Descripción</th>
+                    <th>Productos que Suministra</th>
                 </tr>
             </thead>
             <tbody>
-                {% for prov  in Proveedor  %}
+                {% for prov in Proveedor %}
                 <tr>
-               <td>{{prov.nombre}}</td>
-               <td>{{prov.telefono}}</td>
-               <td>{{prov.email}}</td>
-                <td>{{prov.direccion}}</td>
-                <td>{{prov.descripcion}}</td>
+                    <td><strong>{{ prov.nombre }}</strong></td>
+                    <td>{{ prov.telefono }}</td>
+                    <td>{{ prov.email }}</td>
+                    <td>{{ prov.direccion }}</td>
+                    <td>{{ prov.descripcion }}</td>
+                    <td>
+                        {% if prov.productos.all %}
+                            <ul class="list-unstyled mb-0">
+                                {% for producto in prov.productos.all %}
+                                <li>
+                                    {{ producto.nombre }}
+                                    <span class="badge bg-success">Stock: {{ producto.stock }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span class="text-muted">No suministra productos</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -20,7 +20,7 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Cantidad</th>
+                    <th>Contenido</th>
                     <th>Unidad</th>
                     <th>Precio</th>
                     <th>Umbral</th>
@@ -35,7 +35,7 @@
                     <tr class="{% if prod.stock < prod.umbral %}table-danger{% endif %}">
                     {% if prod.stock < prod.umbral %}
                       <td>{{prod.nombre}}</td>
-                      <td>{{prod.cantidad}}</td>
+                      <td>{{prod.contenido}}</td>
                       <td>{{prod.unidad}}</td>
                       <td>{{prod.precio}}</td>
                       <td>{{prod.umbral}}</td>

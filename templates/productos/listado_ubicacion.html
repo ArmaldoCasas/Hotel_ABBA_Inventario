@@ -12,20 +12,36 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Nombre de las ubicaciones</th>
+                    <th>Nombre de la Ubicación</th>
+                    <th>Productos en esta Ubicación</th>
                 </tr>
             </thead>
             <tbody>
-                {% for ubicacion  in Ubicaciones  %}
-                </tr>
-                <td>{{ubicacion.nombre}}</td>
+                {% for ubicacion in Ubicaciones %}
+                <tr>
+                    <td><strong>{{ ubicacion.nombre }}</strong></td>
+                    <td>
+                        {% if ubicacion.producto_set.all %}
+                            <ul class="list-unstyled mb-0">
+                                {% for producto in ubicacion.producto_set.all %}
+                                <li>
+                                    {{ producto.nombre }} 
+                                    <span class="badge bg-info">Stock: {{ producto.stock }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span class="text-muted">No hay productos en esta ubicación</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+  </div>
 </div>
 {% endblock %}

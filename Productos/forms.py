@@ -1,36 +1,36 @@
 from django import forms
-from .models import Producto, Proveedor, ProveedorProducto,Categoria, Ubicacion
-
+from .models import Producto, Proveedor, ProveedorProducto, Categoria, Ubicacion
 
 class ProductoForm(forms.ModelForm):
     proveedores_seleccionados = forms.ModelMultipleChoiceField(
         queryset=Proveedor.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        label="Proveedores"
+        label="Proveedores",
     )
+    
     class Meta:
         model = Producto
-        fields = ['nombre', 'cantidad', 'unidad', 'precio', 'umbral', 'stock', 'ubicacion', 'categoria']
+        fields = ['nombre', 'contenido', 'unidad', 'precio', 'umbral', 'stock', 'ubicacion', 'categoria']
+    
     def save(self, commit=True):
         # 1. Guardar la instancia del Producto 
         producto = super().save(commit=False)
         if commit:
             producto.save()
         if commit:
-            # 2. Guardar la relación Muchos a Muchos manualmente
+            # 2. Guardar la relación Muchos a Muchos con Proveedores manualmente
             proveedores = self.cleaned_data.get('proveedores_seleccionados')
             
-            # Limpiamos relaciones anteriores
+            # Limpiamos relaciones anteriores de proveedores
             ProveedorProducto.objects.filter(producto=producto).delete()
 
-            # Creamos las nuevas relaciones
+            # Creamos las nuevas relaciones con proveedores
             if proveedores:
                 for proveedor in proveedores:
                     ProveedorProducto.objects.create(
                         producto=producto,
                         proveedor=proveedor
                     )
-
         return producto
 
 class CategoriaForm(forms.ModelForm):
