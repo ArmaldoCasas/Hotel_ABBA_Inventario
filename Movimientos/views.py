@@ -5,7 +5,7 @@ from Productos.models import Producto
 
 def listado_movimientos(request):
     Movimientos_Ingreso = Ingreso.objects.all()
-    return render(request, "movimientos/listado_movimientos.html",{
+    return render(request, "movimientos/listado_movimientos.html", {
         "titulo":"Listado de Movimientos",
         "Movimientos": Movimientos_Ingreso
     })
