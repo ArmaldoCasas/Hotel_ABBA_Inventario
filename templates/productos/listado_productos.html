@@ -7,12 +7,54 @@
   <div class="container mt-4">
     <h2>Inventario</h2>
     
-    <div class="mb-3">
-        <a href={% url "agregar_productos" %} class="btn btn-primary">Agregar Item</a>
-        <a href= class="btn btn-info">Registrar Movimiento</a>
-        <a href= class="btn btn-success">
+    <div class="mb-3 d-flex flex-column flex-md-row gap-2">
+        <a href="{% url "agregar_productos" %}" class="btn btn-primary">Agregar Item</a>
+        <a href="{% url "ingreso" %}" class="btn btn-info">Registrar Movimiento</a>
+        <a type="button" class="btn btn-success">
             <i class="fas fa-file-excel"></i> Exportar Excel
         </a>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-12 col-md-3">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{ request.GET.nombre }}">
+                </div>
+                <div class="col-12 col-md-2">
+                    <label for="categoria" class="form-label">Categoría</label>
+                    <select class="form-select" id="categoria" name="categoria">
+                        <option value="">Todas</option>
+                        {% for cat in Categorias %}
+                        <option value="{{ cat.id }}" {% if request.GET.categoria == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label for="proveedor" class="form-label">Proveedor</label>
+                    <select class="form-select" id="proveedor" name="proveedor">
+                        <option value="">Todos</option>
+                        {% for prov in Proveedores %}
+                        <option value="{{ prov.id }}" {% if request.GET.proveedor == prov.id|stringformat:"s" %}selected{% endif %}>{{ prov.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label for="ubicacion" class="form-label">Ubicación</label>
+                    <select class="form-select" id="ubicacion" name="ubicacion">
+                        <option value="">Todas</option>
+                        {% for ubi in Ubicaciones %}
+                        <option value="{{ ubi.id }}" {% if request.GET.ubicacion == ubi.id|stringformat:"s" %}selected{% endif %}>{{ ubi.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table">

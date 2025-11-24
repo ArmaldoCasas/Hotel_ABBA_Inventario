@@ -1,41 +1,39 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es"class="h-100">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">  
+<html lang="es" class="h-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <title>{% block title %}Hotel ABBA{% endblock %}</title>
 
-    {% block styles %}
-    {% endblock styles %}
-</head>
-<body class="h-100"> 
-        {% block navbar %}
-        <link rel="stylesheet" href="{% static 'css/basehtml.css' %}">
-        <aside class="sidebar">
-            <div class="logo">Hotel ABBA</div>
-            <ul class="menu">
-                <li><a href="/inicio">Inicio</a></li>
-                <li><a href= "{% url 'dashboard' %}">Dashboard</a></li>
-                <li><a href= "{% url 'listado_productos' %}">Productos</a></li>
-                <li><a href="{% url 'listado_movimientos' %}">Movimientos</a></li>
-                <li><a href="{% url 'listado_proveedores' %}">Proveedores</a></li>
-                <li><a href="{% url 'listado_categorias' %}">Categorías</a></li>
-                <li><a href="/usuarios/">Usuarios</a></li>
-                <li><a href="/reportes/">Reportes</a></li>
-            </ul>
-        </aside>
-        {% endblock navbar %}
+    {% block styles %} {% endblock styles %}
+  </head>
+  <body class="h-100">
+    {% block navbar %}
+    <link rel="stylesheet" href="{% static 'css/basehtml.css' %}" />
+    <aside class="sidebar">
+      <div class="logo">Hotel ABBA</div>
+      <ul class="menu">
+        <li><a href="/inicio">Inicio</a></li>
+        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'listado_productos' %}">Productos</a></li>
+        <li><a href="{% url 'listado_movimientos' %}">Movimientos</a></li>
+        <li><a href="{% url 'listado_proveedores' %}">Proveedores</a></li>
+        <li><a href="{% url 'listado_categorias' %}">Categorías</a></li>
+        <li><a href="{% url 'listado_usuarios' %}">Usuarios</a></li>
+        <li><a href="/reportes/">Reportes</a></li>
+        <li><a href="{% url 'listado_ubicacion' %}">Ubicaciones</a></li>
+        <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+      </ul>
+    </aside>
+    {% endblock navbar %}
 
-        <main class="main-with-sidebar">
-                {% block content %}
-                {% endblock content %}
-        </main>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    {% block scripts %}
-    {% endblock scripts %}
-</body>
+    <main class="main-with-sidebar">
+      {% block content %} {% endblock content %}
+    </main>
+  </body>
 </html>

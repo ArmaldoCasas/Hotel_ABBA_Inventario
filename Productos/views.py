@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Producto, Categoria, Proveedor
-from .forms import ProductoForm, CategoriaForm, ProveedorForm
+from .models import Producto, Categoria, Proveedor, Ubicacion
+from .forms import ProductoForm, CategoriaForm, ProveedorForm, UbicacionForm
 
 # Create your views here.
 
@@ -14,10 +14,35 @@ def listado_productos(request):
     if not 2 in request.session.get('permisos'):
         return redirect('inicio')
 
-    Productos = Producto.objects.all() 
+    Productos = Producto.objects.all()
+    Categorias = Categoria.objects.all()
+    Proveedores = Proveedor.objects.all()
+    Ubicaciones = Ubicacion.objects.all()
+
+    # Filtros
+    nombre = request.GET.get('nombre')
+    categoria_id = request.GET.get('categoria')
+    proveedor_id = request.GET.get('proveedor')
+    ubicacion_id = request.GET.get('ubicacion')
+
+    if nombre:
+        Productos = Productos.filter(nombre__icontains=nombre)
+    
+    if categoria_id:
+        Productos = Productos.filter(categoria_id=categoria_id)
+        
+    if proveedor_id:
+        Productos = Productos.filter(proveedores__id=proveedor_id)
+
+    if ubicacion_id:
+        Productos = Productos.filter(ubicacion_id=ubicacion_id)
+
     return render(request,"productos/listado_productos.html",{
         "titulo":"Listado de Productos",
-        "Productos": Productos 
+        "Productos": Productos,
+        "Categorias": Categorias,
+        "Proveedores": Proveedores,
+        "Ubicaciones": Ubicaciones
     })
 
     
@@ -106,4 +131,37 @@ def agregar_proveedores(request):
         formulario_proveedores = ProveedorForm()
     
     return render(request, 'productos/agregar_proveedores.html', {'formulario_proveedores': formulario_proveedores})
+
+def listado_ubicacion(request):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+
+    # verificar que el usuario tenga permisos
+    if not 8 in request.session.get('permisos'):
+        return redirect('inicio')
+
+    Ubicaciones = Ubicacion.objects.all() 
+    return render(request,"productos/listado_ubicacion.html",{
+        "titulo":"Listado de Ubicaciones",
+        "Ubicaciones": Ubicaciones 
+    })
+
+def agregar_ubicacion(request):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+
+    if not 9 in request.session.get('permisos'):
+        return redirect('inicio')
+
+    if request.method == 'POST':
+        formulario_ubicacion = UbicacionForm(request.POST)
+        if formulario_ubicacion.is_valid():
+            formulario_ubicacion.save()
+            return redirect('agregar_ubicacion') 
+    else:
+        formulario_ubicacion = UbicacionForm()
+    
+    return render(request, 'productos/agregar_ubicacion.html', {'formulario_ubicacion': formulario_ubicacion})
 

@@ -1,13 +1,17 @@
 {% extends 'base.html' %} {% load static %} {% block title %}Inicio - Hotel
-ABBA{% endblock %} {% block content %}
+ABBA{% endblock %} {% block styles %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+{% endblock styles %} {% block content %}
 <div
   class="container-fluid d-flex flex-column align-items-center justify-content-center min-vh-100"
 >
   <div class="text-center mb-5">
     <h1 class="display-4 fw-bold text-primary">Bienvenido a Hotel ABBA</h1>
     <p class="lead text-secondary">Seleccione una opción para comenzar</p>
+    <div>
+      Hola, <strong>{{ request.session.user_name|default:'Invitado' }}</strong>
+    </div>
   </div>
-
   <div class="row g-4 justify-content-center w-100" style="max-width: 1200px">
     <!-- Dashboard -->
     <div class="col-md-4 col-lg-3">
@@ -261,25 +265,4 @@ ABBA{% endblock %} {% block content %}
   </div>
 </div>
 
-<style>
-  .hover-effect {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .hover-effect:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
-  }
-  .icon-circle {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-  }
-  .card:hover .icon-circle {
-    transform: scale(1.1);
-  }
-</style>
 {% endblock %}

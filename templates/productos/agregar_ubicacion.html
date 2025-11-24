@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar Ubicación - Hotel ABBA{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Agregar Nueva Ubicación</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ formulario_ubicacion.as_p}}
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Guardar Ubicación</button>
+            <a href="{% url 'listado_ubicacion' %}" class="btn btn-secondary">Volver</a>
+
+        </div>
+    </form>
+</div>
+{% endblock %}
