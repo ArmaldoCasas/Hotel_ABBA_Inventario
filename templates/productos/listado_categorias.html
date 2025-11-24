@@ -1,30 +1,47 @@
 {% extends "base.html" %}
-{% block title %}Crear/Editar Producto - Hotel ABBA{% endblock %}
+{% block title %}Listado de Categorías - Hotel ABBA{% endblock %}
 {% block content %}
 <div class="main-content">
-  <h1>Crear / Editar Producto</h1>
+  <h1>Listado de Categorías</h1>
 
   <div class="container mt-4">
-    <h2>Inventario</h2>
+    <h2>Categorías</h2>
     
     <div class="mb-3">
-        <a href={% url "agregar_categorias" %} class="btn btn-primary">Agregar Item</a>
+        <a href={% url "agregar_categorias" %} class="btn btn-primary">Agregar Categoría</a>
     </div>
 
     <div class="table-responsive">
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Nombre de las categorias</th>
+                    <th>Nombre de la Categoría</th>
+                    <th>Productos en esta Categoría</th>
                 </tr>
             </thead>
             <tbody>
-                {% for categoria  in Categorias  %}
-                </tr>
-                <td>{{categoria.nombre}}</td>
+                {% for categoria in Categorias %}
+                <tr>
+                    <td><strong>{{ categoria.nombre }}</strong></td>
+                    <td>
+                        {% if categoria.producto_set.all %}
+                            <ul class="list-unstyled mb-0">
+                                {% for producto in categoria.producto_set.all %}
+                                <li>
+                                    {{ producto.nombre }}
+                                    <span class="badge bg-primary">Stock: {{ producto.stock }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span class="text-muted">No hay productos en esta categoría</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
-
+        </table>
+    </div>
+  </div>
 </div>
 {% endblock %}

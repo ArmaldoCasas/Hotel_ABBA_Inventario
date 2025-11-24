@@ -5,6 +5,7 @@ UNIT_CHOICES = [
     ('ml', 'ml'),
     ('kg', 'kg'),
 ]
+
 class Categoria(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     def __str__(self):
@@ -29,7 +30,7 @@ class Proveedor(models.Model):
 
 class Producto(models.Model):
     nombre = models.CharField(max_length=200, unique=True)
-    cantidad = models.FloatField(default=0)
+    contenido = models.FloatField(default=0)
     unidad = models.CharField(max_length=50, choices=UNIT_CHOICES, default='kg') 
     precio = models.PositiveIntegerField(default=0)
     # Umbral mínimo para alertar bajo stock
