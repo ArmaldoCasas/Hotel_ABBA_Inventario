@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Productos Salida - Hotel ABBA{% endblock %}
+{% block content %}
+
+<div class="main-content">
+  <h1>Agregar Movimiento de Salida</h1>
+  <form method="post">{% csrf_token %}
+    {{ form_movimiento.as_p }}
+    <button class="btn btn-primary" type="submit">Guardar Producto</button>
+  </form>
+</div>
+
+{% endblock %}
