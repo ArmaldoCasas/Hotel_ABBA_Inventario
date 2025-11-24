@@ -1,8 +1,35 @@
 from django.shortcuts import render, redirect
 from .models import Producto, Categoria, Proveedor
 from .forms import ProductoForm, CategoriaForm, ProveedorForm
+
 # Create your views here.
+
+def listado_productos(request):
+
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+
+    # verificar que el usuario tenga permisos
+    if not 2 in request.session.get('permisos'):
+        return redirect('inicio')
+
+    Productos = Producto.objects.all() 
+    return render(request,"productos/listado_productos.html",{
+        "titulo":"Listado de Productos",
+        "Productos": Productos 
+    })
+
+    
 def Agregar_Productos(request):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+
+    # verificar que el usuario tenga permisos
+    if not 3 in request.session.get('permisos'):
+        return redirect('inicio')
+
     if request.method == "POST":
         formulario_productos = ProductoForm(request.POST)
         if formulario_productos.is_valid():
@@ -11,15 +38,32 @@ def Agregar_Productos(request):
     else:
         formulario_productos=ProductoForm()
     return render(request, "productos/agregar_productos.html", {"formulario_productos":formulario_productos})
-def listado_productos(request):
-    Productos = Producto.objects.all() 
-    return render(request,"productos/listado_productos.html",{
+
+def listado_categorias(request):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+
+    # verificar que el usuario tenga permisos
+    if not 4 in request.session.get('permisos'):
+        return redirect('inicio')
+
+    Categorias = Categoria.objects.all() 
+    return render(request,"productos/listado_categorias.html",{
         "titulo":"Listado de Productos",
-        "Productos": Productos 
+        "Categorias": Categorias 
     })
 
-
 def agregar_categorias(request):
+
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+
+    # verificar que el usuario tenga permisos
+    if not 5 in request.session.get('permisos'):
+        return redirect('inicio')
+
     if request.method == 'POST':
         formulario_categorias = CategoriaForm(request.POST)
         if formulario_categorias.is_valid():
@@ -29,14 +73,30 @@ def agregar_categorias(request):
         formulario_categorias = CategoriaForm()
     
     return render(request, 'productos/agregar_categorias.html', {'formulario_categorias': formulario_categorias})
-def listado_categorias(request):
-    Categorias = Categoria.objects.all() 
-    return render(request,"productos/listado_categorias.html",{
+
+def listado_proveedores(request):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')    
+
+    # verificar que el usuario tenga permisos
+    if not 6 in request.session.get('permisos'):
+        return redirect('inicio')
+
+    Proveedores = Proveedor.objects.all() 
+    return render(request,"productos/listado_proveedores.html",{
         "titulo":"Listado de Productos",
-        "Categorias": Categorias 
+        "Proveedor": Proveedores 
     })
 
 def agregar_proveedores(request):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+
+    if not 7 in request.session.get('permisos'):
+        return redirect('inicio')
+
     if request.method == 'POST':
         formulario_proveedores = ProveedorForm(request.POST)
         if formulario_proveedores.is_valid():
@@ -46,9 +106,4 @@ def agregar_proveedores(request):
         formulario_proveedores = ProveedorForm()
     
     return render(request, 'productos/agregar_proveedores.html', {'formulario_proveedores': formulario_proveedores})
-def listado_proveedores(request):
-    Proveedores = Proveedor.objects.all() 
-    return render(request,"productos/listado_proveedores.html",{
-        "titulo":"Listado de Productos",
-        "Proveedor": Proveedores 
-    })
+

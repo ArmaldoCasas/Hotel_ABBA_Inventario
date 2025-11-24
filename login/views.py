@@ -33,19 +33,38 @@ def login_view(request):
             user = None
 
         if user and user.check_password(password):
-            #falta el crear una session
-            return redirect('dashboard')
+            # guardar los permisos del usuario en la sesion
+            if user.rol:
+                request.session['permisos'] = user.rol.permisos
+
+            # Guardar el id del usuario en la sesión
+            if user.id:
+                request.session['user_id'] = user.id
+            else:
+                request.session['user_id'] = None
+
+            return redirect('inicio')
         else:
             messages.error(request, 'Usuario o contraseña incorrectos')
     
     return render(request,"login/login.html")
 
 def logout_view(request):
-    # falta crear algo para cerrar sesión
+    request.session.flush()
     return redirect('login')
 
 def dashboard_view(request):
+    if not 1 in request.session.get('permisos'):
+        messages.error(request, 'No tienes permisos para acceder a esta pagina')
+        return redirect('inicio')    
     Productos = Producto.objects.all() 
     return render(request, 'login/dashboard.html',{
         "Productos": Productos 
     })
+
+def inicio_view(request):
+    if not request.session.get('user_id'):
+        messages.error(request, 'No tienes permisos para acceder a esta pagina')
+        return redirect('login')
+    
+    return render(request, 'inicio.html')

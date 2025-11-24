@@ -11,7 +11,7 @@ class Roles(models.Model):
     ]
 
     nombre_rol = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Usuario', unique=True)
-    descripcion = models.TextField(blank=True)
+    permisos = models.JSONField(default=[1,2,3,4,5,6,7,8,9], blank=True)
 
     def __str__(self):
         return self.nombre_rol

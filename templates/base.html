@@ -16,7 +16,7 @@
         <aside class="sidebar">
             <div class="logo">Hotel ABBA</div>
             <ul class="menu">
-                <li><a href="/">Inicio</a></li>
+                <li><a href="{% url 'inicio' %}">Inicio</a></li>
                 <li><a href= "{% url "dashboard" %}">Dashboard</a></li>
                 <li><a href= "{% url "listado_productos" %}">Productos</a></li>
                 <li><a href="/movimientos/">Movimientos</a></li>
@@ -24,6 +24,7 @@
                 <li><a href="{% url "listado_categorias" %}">Categorías</a></li>
                 <li><a href="/usuarios/">Usuarios</a></li>
                 <li><a href="/reportes/">Reportes</a></li>
+                <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
             </ul>
         </aside>
         {% endblock navbar %}
@@ -38,5 +39,4 @@
     {% block scripts %}
     {% endblock scripts %}
 </body>
-</html>
 </html>

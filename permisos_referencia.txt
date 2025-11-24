@@ -1,0 +1,28 @@
+LISTADO DE PERMISOS Y SUS IDs
+=============================
+
+PRODUCTOS
+---------
+1: Dashboard
+2: Listado de productos
+3: Agregar nuevos productos
+
+CATEGORÍAS
+----------
+4: Listado de categorías
+5: Agregar nuevas categorías
+
+PROVEEDORES
+-----------
+6: Listado de proveedores
+7: Agregar nuevos proveedores
+
+USUARIOS (Reservado para futuro)
+--------------------------------
+8: Listado de usuarios
+9: Crear usuarios
+
+REPORTES (Reservado para futuro)
+--------------------------------
+10: Listado de reportes
+
