@@ -89,6 +89,7 @@
                         {% for prov in prod.proveedores.all %}
                             {{ prov.nombre }} {% if not forloop.last %}, {% endif %}
                         {% endfor %}
+                        <td><a href="{% url 'editar_productos' prod.id %}" class="btn btn-secondary w-100">Editar</a></td>
                     </td>
 
                 {% endfor %}
