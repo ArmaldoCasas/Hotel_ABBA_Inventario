@@ -223,3 +223,4 @@ def detalle_movimiento_salida(request, salida_id):
         "movimientos": movimientos
     })
 
+###
