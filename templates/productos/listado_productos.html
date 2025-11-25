@@ -90,6 +90,11 @@
                             {{ prov.nombre }} {% if not forloop.last %}, {% endif %}
                         {% endfor %}
                         <td><a href="{% url 'editar_productos' prod.id %}" class="btn btn-secondary w-100">Editar</a></td>
+                        {% if  prod.esta_activo %}
+                        <td><a href="{% url 'cambiar_estado_producto' prod.id %}" class="btn btn-warning w-100">Bloquear</a></td>
+                        {% else %}
+                        <td><a href="{% url 'cambiar_estado_producto' prod.id %}" class="btn btn-success w-100">Desbloquear</a></td>
+                        {% endif %}
                     </td>
 
                 {% endfor %}

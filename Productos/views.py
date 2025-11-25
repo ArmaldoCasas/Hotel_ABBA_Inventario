@@ -92,7 +92,13 @@ def editar_Productos(request,producto_id):
         'producto': producto,
     })
     
-    
+def cambiar_estado_producto(request,producto_id):
+    producto = get_object_or_404(Producto, pk=producto_id)
+
+    producto.esta_activo = not producto.esta_activo
+    producto.save()
+    return redirect("listado_productos")
+
 
 def listado_categorias(request):
     # verificar que el usuario este logueado

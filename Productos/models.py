@@ -1,6 +1,4 @@
 from django.db import models
-
-# Unidades permitidas para los productos
 UNIT_CHOICES = [
     ('ml', 'ml'),
     ('kg', 'kg'),
@@ -36,6 +34,7 @@ class Producto(models.Model):
     # Umbral mínimo para alertar bajo stock
     umbral = models.FloatField(default=5)
     stock = models.FloatField(default=0)
+    esta_activo = models.BooleanField(default=True)
     ubicacion = models.ForeignKey('Ubicacion', on_delete=models.SET_NULL, null=True)
     categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True,)
     proveedores = models.ManyToManyField(
