@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from .debug_views import debug_paths
 
 urlpatterns = [
     path("listado_movimientos/", listado_movimientos, name="listado_movimientos"),
@@ -9,4 +10,5 @@ urlpatterns = [
     path("movimiento_salida/", movimiento_salida, name="movimiento_salida"),
     path("detalle_movimiento_ingreso/<int:ingreso_id>/", detalle_movimiento_ingreso, name="detalle_movimiento_ingreso"),
     path("detalle_movimiento_salida/<int:salida_id>/", detalle_movimiento_salida, name="detalle_movimiento_salida"),
+    path('debug_paths/', debug_paths, name='debug_paths'),
 ]
