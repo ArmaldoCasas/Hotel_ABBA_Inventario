@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Listado de Reportes - Hotel ABBA{% endblock %}
+{% block content %}
+<div class="main-content">
+  <h1>Listado de Reportes</h1>
+
+  <div class="container mt-4">
+    <h2>Reportes</h2>
+    
+    <div class="mb-3">
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reporte in reportes %}
+                <tr>
+                    <td><strong>{{ reporte.nombre }}</strong></td>
+                    <td>{{ reporte.fecha }}</td>
+                    <td>{{ reporte.usuario }}</td>
+                </tr>
+                {% endfor %}        
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
