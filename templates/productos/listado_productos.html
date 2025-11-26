@@ -10,12 +10,12 @@
     <div class="mb-3 d-flex flex-column flex-md-row gap-2">
         <a href="{% url "agregar_productos" %}" class="btn btn-primary">Agregar Item</a>
         <a href="{% url "ingreso" %}" class="btn btn-info">Registrar Movimiento</a>
-        <a type="button" class="btn btn-success">
-            <i class="fas fa-file-excel"></i> Exportar Excel
+        <a href="{% url "export_inventory" %}" class="btn btn-success">
+            <i class="fas fa-file-excel"></i> exportar a excel
         </a>
     </div>
 
-    <!-- Filtros -->
+    <!-- Filtros -->    
     <div class="card mb-4">
         <div class="card-body">
             <form method="GET" class="row g-3">

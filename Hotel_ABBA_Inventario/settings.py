@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "Movimientos",
     "Productos",
     "login",
+    "reportes",
 ]
 
 MIDDLEWARE = [

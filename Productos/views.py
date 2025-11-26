@@ -63,13 +63,19 @@ def Agregar_Productos(request):
     else:
         formulario_productos=ProductoForm()
     return render(request, "productos/agregar_productos.html", {"formulario_productos":formulario_productos})
+
+
 def editar_Productos(request,producto_id):
     if not request.session.get('user_id'):
         return redirect('login')
      
     if not 3 in request.session.get('permisos'):
         return redirect('inicio')
+
     producto = get_object_or_404(Producto, pk=producto_id)
+    if not producto.esta_activo :
+        
+        return redirect("listado_productos")
 
     if request.method == 'POST':
         formulario_productos = ProductoForm(request.POST, instance=producto)    
@@ -91,7 +97,7 @@ def editar_Productos(request,producto_id):
         'proveedores': proveedores,
         'producto': producto,
     })
-    
+
 def cambiar_estado_producto(request,producto_id):
     producto = get_object_or_404(Producto, pk=producto_id)
 
