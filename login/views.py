@@ -57,7 +57,7 @@ def login_view(request):
             else:
                 request.session['user_name'] = None
 
-            return redirect('error')
+            return redirect('inicio')
         else:
             messages.error(request, 'Usuario o contraseña incorrectos')
     
