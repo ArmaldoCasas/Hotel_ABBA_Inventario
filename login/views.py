@@ -12,7 +12,7 @@ def create_user_view(request):
         return redirect('login')
     # verificar que el usuario tenga permisos
     if not 9 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -57,7 +57,7 @@ def login_view(request):
             else:
                 request.session['user_name'] = None
 
-            return redirect('inicio')
+            return redirect('error')
         else:
             messages.error(request, 'Usuario o contraseña incorrectos')
     
@@ -73,7 +73,7 @@ def dashboard_view(request):
         return redirect('login')
     # verificar que el usuario tenga permisos
     if not 1 in request.session.get('permisos'):
-        return redirect('inicio')    
+        return redirect('error')    
     Productos = Producto.objects.all()
     ultimos_ingresos = Ingreso.objects.all().order_by('-fecha')[:5]
     ultimos_salidas = Salida.objects.all().order_by('-fecha')[:5]
@@ -96,7 +96,7 @@ def listado_usuarios(request):
         return redirect('login')
     # verificar que el usuario tenga permisos
     if not 8 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
     
     usuarios = Usuarios.objects.all()
     return render(request, 'login/listado_usuarios.html', {'usuarios': usuarios})
@@ -108,7 +108,7 @@ def gestionar_roles(request):
     # Validar permiso de administrador (asumiendo que 9 es crear usuarios/gestionar usuarios)
     if not 10 in request.session.get('permisos', []):
         messages.error(request, 'No tienes permisos para gestionar roles')
-        return redirect('listado_usuarios')
+        return redirect('error')
 
     if request.method == 'POST':
         rol_id = request.POST.get('rol_id')
@@ -200,3 +200,6 @@ def editar_usuario(request, user_id):
         'usuario': usuario,
         'roles': roles
     })
+
+def error_view(request):
+    return render(request, 'error.html')
