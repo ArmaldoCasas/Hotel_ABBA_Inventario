@@ -50,6 +50,14 @@
                         {% endfor %}
                     </select>
                 </div>
+                <div class="col-12 col-md-2">
+                    <label for="estado" class="form-label">Estado</label>
+                    <select class="form-select" id="estado" name="estado">
+                        <option value="">Todos</option>
+                        <option value="Activo" {% if request.GET.estado == "Activo" %}selected{% endif %}>Activo</option>
+                        <option value="Inactivo" {% if request.GET.estado == "Inactivo" %}selected{% endif %}>Inactivo</option>
+                    </select>
+                </div>
                 <div class="col-12 col-md-3 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100">Filtrar</button>
                 </div>
@@ -89,11 +97,13 @@
                         {% for prov in prod.proveedores.all %}
                             {{ prov.nombre }} {% if not forloop.last %}, {% endif %}
                         {% endfor %}
-                        <td><a href="{% url 'editar_productos' prod.id %}" class="btn btn-secondary w-100">Editar</a></td>
-                        {% if  prod.esta_activo %}
-                        <td><a href="{% url 'cambiar_estado_producto' prod.id %}" class="btn btn-warning w-100">Bloquear</a></td>
+                    </td>
+                    <td><a href="{% url 'editar_productos' prod.id %}" class="btn btn-secondary w-100">Editar</a></td>
+                    <td>
+                        {% if prod.esta_activo %}
+                        <a href="{% url 'cambiar_estado_producto' prod.id %}" class="btn btn-warning w-100">Bloquear</a>
                         {% else %}
-                        <td><a href="{% url 'cambiar_estado_producto' prod.id %}" class="btn btn-success w-100">Desbloquear</a></td>
+                        <a href="{% url 'cambiar_estado_producto' prod.id %}" class="btn btn-success w-100">Desbloquear</a>
                         {% endif %}
                     </td>
 

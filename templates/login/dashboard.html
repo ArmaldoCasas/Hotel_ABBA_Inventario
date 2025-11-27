@@ -1,62 +1,59 @@
-{% extends 'base.html' %}
-{% block title %}Dashboard - Hotel ABBA{% endblock %}
-
-{% block styles %}
-{% endblock styles %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %} Dashboard - Hotel ABBA {% endblock %}
+{% block styles %} {% endblock styles %} {% block content %}
 <div class="container-fluid mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h4">Dashboard</h1>
-        <div>Hola, <strong>{{ request.session.user_name|default:'Invitado' }}</strong></div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4">Dashboard</h1>
+    <div>
+      Hola, <strong>{{ request.session.user_name|default:'Invitado' }}</strong>
     </div>
-    <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Productos con poco stock</h5>
- <div class="table-responsive">
-        <table class="table">
-            <thead>
+  </div>
+  <div class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Productos con poco stock</h5>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Contenido</th>
-                    <th>Unidad</th>
-                    <th>Precio</th>
-                    <th>Umbral</th>
-                    <th>Stock</th>
-                    <th>Ubicacion </th>
-                    <th>Categoria</th>
-                    <th>Proveedores</th>
+                  <th>Nombre</th>
+                  <th>Contenido</th>
+                  <th>Unidad</th>
+                  <th>Precio</th>
+                  <th>Umbral</th>
+                  <th>Stock</th>
+                  <th>Ubicacion</th>
+                  <th>Categoria</th>
+                  <th>Proveedores</th>
                 </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
                 {% for prod  in Productos  %}
                     <tr class="{% if prod.stock < prod.umbral %}table-danger{% endif %}">
-                    {% if prod.stock < prod.umbral %}
-                      <td>{{prod.nombre}}</td>
-                      <td>{{prod.contenido}}</td>
-                      <td>{{prod.unidad}}</td>
-                      <td>{{prod.precio}}</td>
-                      <td>{{prod.umbral}}</td>
-                      <td>{{prod.stock}}</td>
-                      <td>{{prod.ubicacion}}</td>
-                      <td>{{prod.categoria}}</td>
-                      <td>
+                  {% if prod.stock < prod.umbral %}
+                  <td>{{prod.nombre}}</td>
+                  <td>{{prod.contenido}}</td>
+                  <td>{{prod.unidad}}</td>
+                  <td>{{prod.precio}}</td>
+                  <td>{{prod.umbral}}</td>
+                  <td>{{prod.stock}}</td>
+                  <td>{{prod.ubicacion}}</td>
+                  <td>{{prod.categoria}}</td>
+                  <td>
                           {% for prov in prod.proveedores.all %}
                               {{ prov.nombre }} {% if not forloop.last %}, {% endif %}
                           {% endfor %}
-                      </td>
-                    {% endif %}
-                  {% endfor %}
-                  </tr>
+                  </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
               </tbody>
-        </table>
+            </table>
 
-</div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
+    </div>
 
         <div class="col-lg-6 mb-4">
             <div class="card">
@@ -91,36 +88,61 @@
                 </div>
             </div>
         </div>
+      </div>
     </div>
-
+  </div>
 </div>
 
 <!-- Modal reponer -->
 <div class="modal fade" id="replenishModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Reponer producto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="replenishForm">
-                    <div class="mb-3">
-                        <label class="form-label">Producto</label>
-                        <input type="text" id="modalProduct" class="form-control" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Cantidad</label>
-                        <input type="number" id="modalQuantity" class="form-control" min="1" value="1">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="submitReplenish()">Reponer</button>
-            </div>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Reponer producto</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="replenishForm">
+          <div class="mb-3">
+            <label class="form-label">Producto</label>
+            <input
+              type="text"
+              id="modalProduct"
+              class="form-control"
+              readonly
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Cantidad</label>
+            <input
+              type="number"
+              id="modalQuantity"
+              class="form-control"
+              min="1"
+              value="1"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="submitReplenish()"
+        >
+          Reponer
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
 {% endblock content %}

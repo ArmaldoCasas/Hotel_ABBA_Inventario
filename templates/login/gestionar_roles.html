@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% block title %} Gestionar Roles - Hotel ABBA 
+{% endblock %} {% block content %}
+<div class="main-content">
+  <h1>Gestionar Roles y Permisos</h1>
+
+  <div class="container mt-4">
+    <div class="mb-3">
+      <a href="{% url 'listado_usuarios' %}" class="btn btn-secondary"
+        >Volver a Usuarios</a
+      >
+    </div>
+
+    <div class="row">
+      {% for rol in roles %}
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">{{ rol.nombre_rol }}</h5>
+          </div>
+          <div class="card-body">
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="rol_id" value="{{ rol.id }}" />
+
+              <h6>Permisos:</h6>
+              <div class="row">
+                {% for id, nombre in permisos_dict.items %}
+                <div class="col-12">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox"
+                    name="permisos" value="{{ id }}" id="permiso_{{ rol.id }}_{{
+                    id }}" {% if id in rol.permisos %}checked{% endif %} 
+                    {% if rol.nombre_rol == 'Administrador' %}disabled{% endif %} />
+                    <label
+                      class="form-check-label"
+                      for="permiso_{{ rol.id }}_{{ id }}"
+                    >
+                      {{ nombre }}
+                    </label>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+
+              {% if rol.nombre_rol != 'Administrador' %}
+              <button type="submit" class="btn btn-primary mt-3">
+                Guardar Permisos
+              </button>
+              {% else %}
+              <div class="alert alert-info mt-3">
+                El rol de Administrador tiene todos los permisos por defecto y
+                no se puede modificar.
+              </div>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

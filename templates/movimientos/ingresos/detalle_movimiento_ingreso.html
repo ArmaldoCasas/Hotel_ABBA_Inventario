@@ -1,7 +1,5 @@
-{% extends "base.html" %}
-{% block title %}Detalle Movimiento - Hotel ABBA{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Detalle Movimiento - Hotel ABBA
+{% endblock %} {% block content %}
 <h1>Detalle de Ingreso: {{ ingreso.numero_documento }}</h1>
 <p><strong>Proveedor:</strong> {{ ingreso.proveedor }}</p>
 <p><strong>Tipo de documento:</strong> {{ ingreso.tipo_documento }}</p>
@@ -9,26 +7,30 @@
 <p><strong>Fecha:</strong> {{ ingreso.fecha }}</p>
 
 <h2>Productos</h2>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Producto</th>
-      <th>Cantidad</th>
-      <th>Precio Unitario</th>
-      <th>Subtotal</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for movimiento in movimientos %}
-    <tr>
-      <td>{{ movimiento.producto.nombre }}</td>
-      <td>{{ movimiento.cantidad }}</td>
-      <td>{{ movimiento.precio_unitario }}</td>
-      <td>{{ movimiento.subtotal|floatformat:2 }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Precio Unitario</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for movimiento in movimientos %}
+      <tr>
+        <td>{{ movimiento.producto.nombre }}</td>
+        <td>{{ movimiento.cantidad }}</td>
+        <td>{{ movimiento.precio_unitario }}</td>
+        <td>{{ movimiento.subtotal|floatformat:2 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
-<a href="{% url 'listado_movimientos' %}" class="btn btn-secondary">Volver al listado</a>
+<a href="{% url 'listado_movimientos' %}" class="btn btn-secondary"
+  >Volver al listado</a
+>
 {% endblock %}
