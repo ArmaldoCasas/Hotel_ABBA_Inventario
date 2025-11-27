@@ -14,6 +14,13 @@ def listado_movimientos(request):
     })
 
 def ingreso(request, ingreso_id=None):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+    # verificar que el usuario tenga permisos
+    if 14 not in request.session.get('permisos', []):
+        return redirect('listado_movimientos')
+    
     # Inicializar datos temporales de movimientos en sesión
     if 'movimientos_temp' not in request.session:
         request.session['movimientos_temp'] = []
@@ -31,6 +38,9 @@ def ingreso(request, ingreso_id=None):
                     'error': 'Debe agregar al menos 1 producto antes de guardar el ingreso.',
                 })
             
+            # verificar permisos antes de guardar ingreso
+            if 14 not in request.session.get('permisos', []):
+                return redirect('listado_movimientos')
             # Guardar ingreso y movimientos en DB
             ingreso_id = request.session.get('ingreso_id')
             if ingreso_id:
@@ -121,6 +131,13 @@ def ingreso(request, ingreso_id=None):
     })
 
 def movimiento_ingreso(request, ingreso_id):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+    # verificar que el usuario tenga permisos
+    if 14 not in request.session.get('permisos', []):
+        return redirect('listado_movimientos')
+    
     # Limpiar session previa movimientos para evitar Decimal no serializable
     if 'movimientos_temp' not in request.session or not request.session['movimientos_temp']:
         request.session['movimientos_temp'] = []
@@ -133,7 +150,8 @@ def movimiento_ingreso(request, ingreso_id):
             mov['precio_unitario'] = float(mov.get('precio_unitario'))
         request.session['movimientos_temp'] = movimientos_temp
         request.session.modified = True
-
+    
+    # Procesar formulario de nuevo movimiento
     if request.method == 'POST':
         form_movimiento = MovimientoIngresoForm(request.POST)
         if form_movimiento.is_valid():
@@ -156,6 +174,14 @@ def movimiento_ingreso(request, ingreso_id):
 
 
 def salida(request):
+
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+    # verificar que el usuario tenga permisos
+    if 15 not in request.session.get('permisos', []):
+        return redirect('listado_movimientos')
+    
     # Inicializar datos temporales de movimientos en sesión
     if 'movimientos_salida_temp' not in request.session:
         request.session['movimientos_salida_temp'] = []
@@ -259,6 +285,14 @@ def salida(request):
     })
 
 def movimiento_salida(request):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+    # verificar que el usuario tenga permisos
+    if 15 not in request.session.get('permisos', []):
+        return redirect('listado_movimientos')
+    
+    # Limpiar session previa movimientos para evitar Decimal no serializable
     if 'movimientos_salida_temp' not in request.session:
         request.session['movimientos_salida_temp'] = []
     else:
@@ -295,6 +329,13 @@ def movimiento_salida(request):
     })
 
 def detalle_movimiento_ingreso(request, ingreso_id):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+    # verificar que el usuario tenga permisos
+    if 18 not in request.session.get('permisos', []):
+        return redirect('listado_movimientos')
+    
     ingreso = get_object_or_404(Ingreso, id=ingreso_id)
     movimientos_qs = ingreso.movimientoingreso_set.all()
     movimientos = []
@@ -312,6 +353,13 @@ def detalle_movimiento_ingreso(request, ingreso_id):
     })
 
 def detalle_movimiento_salida(request, salida_id):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+    # verificar que el usuario tenga permisos
+    if 19 not in request.session.get('permisos', []):
+        return redirect('listado_movimientos')
+    
     salida = get_object_or_404(Salida, id=salida_id)
     movimientos_qs = salida.movimientosalida_set.all()
     movimientos = []
@@ -327,12 +375,26 @@ def detalle_movimiento_salida(request, salida_id):
     })
 
 def listado_movimientos_ingreso(request):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+    # verificar que el usuario tenga permisos
+    if 16 not in request.session.get('permisos', []):
+        return redirect('listado_movimientos')
+    
     movimientos_ingreso = Ingreso.objects.all().order_by('-fecha')
     return render(request, "movimientos/ingresos/listado_movimientos_ingreso.html", {
         "movimientos_ingreso": movimientos_ingreso
     })
 
 def listado_movimientos_salida(request):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+    # verificar que el usuario tenga permisos
+    if 17 not in request.session.get('permisos', []):
+        return redirect('listado_movimientos')
+    
     movimientos_salida = Salida.objects.all().order_by('-fecha')
     return render(request, "movimientos/salidas/listado_movimientos_salida.html", {
         "movimientos_salida": movimientos_salida

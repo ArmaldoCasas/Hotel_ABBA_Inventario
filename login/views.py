@@ -151,6 +151,12 @@ def gestionar_roles(request):
         11: 'Listado de reportes',
         12: 'Listado de ubicaciones',
         13: 'Agregar nuevas ubicaciones',
+        14: 'Realizar movimiento de ingreso',
+        15: 'Realizar movimiento de salida',
+        16: 'Ver listado de ingresos',
+        17: 'Ver listado de salidas',
+        18: 'Ver detalle de ingreso',
+        19: 'Ver detalle de salida',
     }
     
     return render(request, 'login/gestionar_roles.html', {
