@@ -17,6 +17,12 @@ def create_user_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        
+        # Validar que la contraseña tenga al menos 8 caracteres
+        if len(password) < 8:
+            messages.error(request, 'La contraseña debe tener al menos 8 caracteres')
+            return redirect('registrar')
+        
         # Evitar duplicados: comprobar si ya existe el usuario para que no de error de pagina
         if Usuarios.objects.filter(nombre=username).exists():
             messages.error(request, 'El nombre de usuario ya existe')
