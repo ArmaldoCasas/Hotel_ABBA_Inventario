@@ -1,53 +1,65 @@
-{% extends 'base.html' %}
-{% block title %}Registrar Salida - Hotel ABBA{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %}Registrar Salida - Hotel ABBA{%
+endblock %} {% block content %}
 <h1>Registrar Salida</h1>
 {% if not salida_id %}
 <div class="alert alert-warning" role="alert">
-  Para poder agregar productos, primero debe guardar los datos iniciales de la salida haciendo clic en <strong>Guardar Datos</strong>.
+  Para poder agregar productos, primero debe guardar los datos iniciales de la
+  salida haciendo clic en <strong>Guardar Datos</strong>.
 </div>
 {% endif %}
 <form method="post" novalidate>
   {% csrf_token %}
   <h3>Datos de salida</h3>
   <div class="mb-3">
-    {{ form_salida.motivo.label_tag }}
-    {{ form_salida.motivo }}
-    {% if form_salida.motivo.errors %}
-      <div class="text-danger">{{ form_salida.motivo.errors }}</div>
+    {{ form_salida.motivo.label_tag }} {{ form_salida.motivo }} {% if
+    form_salida.motivo.errors %}
+    <div class="text-danger">{{ form_salida.motivo.errors }}</div>
     {% endif %}
   </div>
   {% if salida_id and salida_id != None %}
-  <a href="{% url 'movimiento_salida' %}" class="btn btn-primary mb-3">Agregar producto</a>
+  <a href="{% url 'movimiento_salida' %}" class="btn btn-primary mb-3"
+    >Agregar producto</a
+  >
   {% else %}
-  <a href="#" class="btn btn-primary mb-3 disabled" tabindex="-1" aria-disabled="true" title="Guarde los datos primero para agregar productos">Agregar producto</a>
+  <a
+    href="#"
+    class="btn btn-primary mb-3 disabled"
+    tabindex="-1"
+    aria-disabled="true"
+    title="Guarde los datos primero para agregar productos"
+    >Agregar producto</a
+  >
   {% endif %}
-  <button name="guardar_datos_salida" class="btn btn-secondary" type="submit">Guardar Datos</button>
+  <button name="guardar_datos_salida" class="btn btn-secondary" type="submit">
+    Guardar Datos
+  </button>
 </form>
 
 {% if movimientos %}
-<hr>
+<hr />
 <h3>Productos agregados</h3>
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Producto</th>
-      <th>Cantidad</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for mov in movimientos %}
-    <tr>
-      <td>{{ mov.producto_nombre }}</td>
-      <td>{{ mov.cantidad }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<form method="post" style="display:inline">
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for mov in movimientos %}
+      <tr>
+        <td>{{ mov.producto_nombre }}</td>
+        <td>{{ mov.cantidad }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<form method="post" style="display: inline">
   {% csrf_token %}
-  <button name="guardar_salida" class="btn btn-success" type="submit">Guardar Salida</button>
+  <button name="guardar_salida" class="btn btn-success" type="submit">
+    Guardar Salida
+  </button>
 </form>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}

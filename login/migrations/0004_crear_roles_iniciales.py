@@ -9,7 +9,7 @@ def crear_roles_iniciales(apps, schema_editor):
         {
             "nombre_rol": "Administrador",
             # Aquí puedes ajustar permisos según tu lógica
-            "permisos": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            "permisos": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
         },
         {
             "nombre_rol": "Usuario",
