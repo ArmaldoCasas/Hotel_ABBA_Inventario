@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% block title %}Registrar Salida - Hotel ABBA{%
-endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %} Registrar Salida - Hotel ABBA
+{% endblock %} {% block content %}
 <h1>Registrar Salida</h1>
 {% if not salida_id %}
 <div class="alert alert-warning" role="alert">
@@ -11,8 +11,8 @@ endblock %} {% block content %}
   {% csrf_token %}
   <h3>Datos de salida</h3>
   <div class="mb-3">
-    {{ form_salida.motivo.label_tag }} {{ form_salida.motivo }} {% if
-    form_salida.motivo.errors %}
+    {{ form_salida.motivo.label_tag }} {{ form_salida.motivo }} 
+    {% if form_salida.motivo.errors %}
     <div class="text-danger">{{ form_salida.motivo.errors }}</div>
     {% endif %}
   </div>

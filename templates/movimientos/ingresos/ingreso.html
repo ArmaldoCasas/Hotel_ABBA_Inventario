@@ -1,5 +1,5 @@
-{% extends "base.html" %} {% block title %}Registrar Ingreso - Hotel ABBA{%
-endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}Registrar Ingreso - Hotel ABBA
+{% endblock %} {% block content %}
 <h1>Registrar Ingreso</h1>
 {% if not ingreso_id %}
 <div class="alert alert-warning" role="alert">
@@ -11,21 +11,18 @@ endblock %} {% block content %}
   {% csrf_token %}
   <h3>Datos de ingreso</h3>
   <div class="mb-3">
-    {{ form_ingreso.proveedor.label_tag }} {{ form_ingreso.proveedor }} {% if
-    form_ingreso.proveedor.errors %}
+    {{ form_ingreso.proveedor.label_tag }} {{ form_ingreso.proveedor }}
+    {% if form_ingreso.proveedor.errors %}
     <div class="text-danger">{{ form_ingreso.proveedor.errors }}</div>
     {% endif %}
   </div>
   <div class="mb-3">
-    {{ form_ingreso.tipo_documento.label_tag }} {{ form_ingreso.tipo_documento
-    }} {% if form_ingreso.tipo_documento.errors %}
+    {{ form_ingreso.tipo_documento.label_tag }} {{ form_ingreso.tipo_documento }} {% if form_ingreso.tipo_documento.errors %}
     <div class="text-danger">{{ form_ingreso.tipo_documento.errors }}</div>
     {% endif %}
   </div>
   <div class="mb-3">
-    {{ form_ingreso.numero_documento.label_tag }} {{
-    form_ingreso.numero_documento }} {% if form_ingreso.numero_documento.errors
-    %}
+    {{ form_ingreso.numero_documento.label_tag }} {{ form_ingreso.numero_documento }} {% if form_ingreso.numero_documento.errors %}
     <div class="text-danger">{{ form_ingreso.numero_documento.errors }}</div>
     {% endif %}
   </div>
