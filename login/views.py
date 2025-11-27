@@ -12,7 +12,7 @@ def create_user_view(request):
         return redirect('login')
     # verificar que el usuario tenga permisos
     if not 9 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -73,7 +73,7 @@ def dashboard_view(request):
         return redirect('login')
     # verificar que el usuario tenga permisos
     if not 1 in request.session.get('permisos'):
-        return redirect('inicio')    
+        return redirect('error')    
     Productos = Producto.objects.all()
     ultimos_ingresos = Ingreso.objects.all().order_by('-fecha')[:5]
     ultimos_salidas = Salida.objects.all().order_by('-fecha')[:5]
@@ -96,7 +96,7 @@ def listado_usuarios(request):
         return redirect('login')
     # verificar que el usuario tenga permisos
     if not 8 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
     
     usuarios = Usuarios.objects.all()
     return render(request, 'login/listado_usuarios.html', {'usuarios': usuarios})
@@ -105,10 +105,9 @@ def gestionar_roles(request):
     if not request.session.get('user_id'):
         return redirect('login')
     
-    # Validar permiso de administrador (asumiendo que 9 es crear usuarios/gestionar usuarios)
+    # Validar permiso de administrador
     if not 10 in request.session.get('permisos', []):
-        messages.error(request, 'No tienes permisos para gestionar roles')
-        return redirect('listado_usuarios')
+        return redirect('error')
 
     if request.method == 'POST':
         rol_id = request.POST.get('rol_id')
@@ -122,8 +121,7 @@ def gestionar_roles(request):
             
             # Protección para el rol de Administrador
             if rol.nombre_rol == 'Administrador':
-                messages.error(request, 'No se pueden modificar los permisos del Administrador')
-                return redirect('gestionar_roles')
+                return redirect('error')
                 
             rol.permisos = permisos_ints
             rol.save()
@@ -131,7 +129,7 @@ def gestionar_roles(request):
         except Roles.DoesNotExist:
             messages.error(request, 'Rol no encontrado')
             
-        return redirect('gestionar_roles')
+        return redirect('error')
 
     roles = Roles.objects.all()
     
@@ -163,14 +161,12 @@ def editar_usuario(request, user_id):
         return redirect('login')
         
     if not 10 in request.session.get('permisos', []):
-        messages.error(request, 'No tienes permisos para editar usuarios')
-        return redirect('listado_usuarios')
+        return redirect('error')
 
     try:
         usuario = Usuarios.objects.get(id=user_id)
     except Usuarios.DoesNotExist:
-        messages.error(request, 'Usuario no encontrado')
-        return redirect('listado_usuarios')
+        return redirect('error')
 
     if request.method == 'POST':
         rol_id = request.POST.get('rol')
@@ -187,10 +183,14 @@ def editar_usuario(request, user_id):
             usuario.save()
             messages.success(request, 'Rol removido del usuario')
             
-        return redirect('listado_usuarios')
+        return redirect('error')
 
     roles = Roles.objects.all()
     return render(request, 'login/editar_usuario.html', {
         'usuario': usuario,
         'roles': roles
     })
+
+def error_view(request):
+    messages.error(request, 'No tienes permisos para acceder a esta página')
+    return render(request, 'error.html')
