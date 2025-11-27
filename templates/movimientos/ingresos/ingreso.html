@@ -3,6 +3,11 @@
 
 {% block content %}
 <h1>Registrar Ingreso</h1>
+{% if error %}
+<div class="alert alert-danger" role="alert">
+  {{ error }}
+</div>
+{% endif %}
 {% if not ingreso_id %}
 <div class="alert alert-warning" role="alert">
   Para poder agregar productos, primero debe guardar los datos iniciales del ingreso haciendo clic en <strong>Guardar Datos</strong>.
@@ -49,6 +54,7 @@
       <th>Producto</th>
       <th>Cantidad</th>
       <th>Precio Unitario</th>
+      <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
@@ -57,6 +63,25 @@
       <td>{{ mov.producto_nombre }}</td>
       <td>{{ mov.cantidad }}</td>
       <td>{{ mov.precio_unitario }}</td>
+      <td>
+        {% if request.GET.edit == forloop.counter0|stringformat:"s" %}
+          <form method="post" class="d-flex align-items-center">
+            {% csrf_token %}
+            <input type="hidden" name="indice" value="{{ forloop.counter0 }}">
+            <input name="cantidad" type="number" step="0.01" min="0.01" class="form-control form-control-sm me-2" value="{{ mov.cantidad }}" required>
+            <input name="precio_unitario" type="number" step="0.01" min="0.01" class="form-control form-control-sm me-2" value="{{ mov.precio_unitario }}" required>
+            <button name="guardar_edicion_ingreso" class="btn btn-sm btn-primary me-2" type="submit">Guardar</button>
+            <a href="{% url 'ingreso' %}" class="btn btn-sm btn-secondary">Cancelar</a>
+          </form>
+        {% else %}
+          <a href="?edit={{ forloop.counter0 }}" class="btn btn-sm btn-warning me-2">Editar</a>
+          <form method="post" style="display:inline">
+            {% csrf_token %}
+            <input type="hidden" name="indice" value="{{ forloop.counter0 }}">
+            <button name="eliminar_producto_ingreso" class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+          </form>
+        {% endif %}
+      </td>
     </tr>
     {% endfor %}
   </tbody>

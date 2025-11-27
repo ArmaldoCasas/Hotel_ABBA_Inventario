@@ -3,6 +3,8 @@ from .views import *
 
 urlpatterns = [
     path("listado_movimientos/", listado_movimientos, name="listado_movimientos"),
+    path("listado_movimientos_ingreso/", listado_movimientos_ingreso, name="listado_movimientos_ingreso"),
+    path("listado_movimientos_salida/", listado_movimientos_salida, name="listado_movimientos_salida"),
     path("ingreso/", ingreso, name="ingreso"),
     path("movimiento_ingreso/<int:ingreso_id>/", movimiento_ingreso, name="movimiento_ingreso"),
     path("salida/", salida, name="salida"),

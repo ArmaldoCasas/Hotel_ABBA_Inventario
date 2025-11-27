@@ -9,12 +9,16 @@
   </div>
 
   <h2>Movimientos de Ingreso</h2>
+  <div class="mb-3">
+    <a href="{% url 'listado_movimientos_ingreso' %}" class="btn btn-info">Ver todos los ingresos</a>
+  </div>
   <table class="table">
     <thead>
       <tr>
         <th>ID</th>
         <th>Tipo Documento</th>
         <th>Número Documento</th>
+        <th>Usuario</th>
         <th>Fecha</th>
         <th>Acciones</th>
       </tr>
@@ -25,6 +29,7 @@
         <td>{{ movimiento.id }}</td>
         <td>{{ movimiento.tipo_documento }}</td>
         <td>{{ movimiento.numero_documento }}</td>
+        <td>{{ movimiento.usuario.nombre|default:"N/A" }}</td>
         <td>{{ movimiento.fecha }}</td>
         <td>
           <a href="{% url 'detalle_movimiento_ingreso' movimiento.id %}" class="btn btn-primary btn-sm">Detalle</a>
@@ -32,18 +37,22 @@
       </tr>
       {% empty %}
       <tr>
-        <td colspan="5" class="text-center">No hay movimientos de ingreso</td>
+        <td colspan="6" class="text-center">No hay movimientos de ingreso</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 
   <h2 class="mt-5">Movimientos de Salida</h2>
+  <div class="mb-3">
+    <a href="{% url 'listado_movimientos_salida' %}" class="btn btn-info">Ver todas las salidas</a>
+  </div>
   <table class="table">
     <thead>
       <tr>
         <th>ID</th>
         <th>Motivo</th>
+        <th>Usuario</th>
         <th>Fecha</th>
         <th>Acciones</th>
       </tr>
@@ -53,6 +62,7 @@
       <tr>
         <td>{{ movimiento.id }}</td>
         <td>{{ movimiento.motivo }}</td>
+        <td>{{ movimiento.usuario.nombre|default:"N/A" }}</td>
         <td>{{ movimiento.fecha }}</td>
         <td>
           <a href="{% url 'detalle_movimiento_salida' movimiento.id %}" class="btn btn-primary btn-sm">Detalle</a>
@@ -60,7 +70,7 @@
       </tr>
       {% empty %}
       <tr>
-        <td colspan="4" class="text-center">No hay movimientos de salida</td>
+        <td colspan="5" class="text-center">No hay movimientos de salida</td>
       </tr>
       {% endfor %}
     </tbody>

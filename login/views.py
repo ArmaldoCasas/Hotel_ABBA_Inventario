@@ -1,5 +1,6 @@
 from login.models import Usuarios, Roles
 from Productos.models import Producto
+from Movimientos.models import Ingreso, Salida
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
@@ -67,10 +68,14 @@ def dashboard_view(request):
     if not 1 in request.session.get('permisos'):
         messages.error(request, 'No tienes permisos para acceder a esta pagina')
         return redirect('inicio')    
-    Productos = Producto.objects.all() 
+    Productos = Producto.objects.all()
+    ultimos_ingresos = Ingreso.objects.all().order_by('-fecha')[:5]
+    ultimos_salidas = Salida.objects.all().order_by('-fecha')[:5]
     return render(request, 'login/dashboard.html',{
         "Productos": Productos,
-        "user_name": request.session.get('user_name') 
+        "user_name": request.session.get('user_name'),
+        "ultimos_ingresos": ultimos_ingresos,
+        "ultimos_salidas": ultimos_salidas
     })
 
 def inicio_view(request):

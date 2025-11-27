@@ -63,8 +63,29 @@
                 <div class="card-body">
                     <h5 class="card-title">Últimos movimientos</h5>
                     <table class="table table-sm">
-                        <thead><tr><th>Fecha</th><th>Tipo</th><th>Producto</th><th>Cantidad</th></tr></thead>
+                        <thead><tr><th>Fecha</th><th>Tipo</th><th>Usuario</th><th>Detalle</th></tr></thead>
                         <tbody>
+                            {% for ingreso in ultimos_ingresos %}
+                            <tr>
+                                <td>{{ ingreso.fecha|date:"d/m/Y H:i" }}</td>
+                                <td><span class="badge bg-success">Ingreso</span></td>
+                                <td>{{ ingreso.usuario.nombre|default:"N/A" }}</td>
+                                <td><a href="{% url 'detalle_movimiento_ingreso' ingreso.id %}" class="btn btn-sm btn-primary">Ver</a></td>
+                            </tr>
+                            {% endfor %}
+                            {% for salida in ultimos_salidas %}
+                            <tr>
+                                <td>{{ salida.fecha|date:"d/m/Y H:i" }}</td>
+                                <td><span class="badge bg-danger">Salida</span></td>
+                                <td>{{ salida.usuario.nombre|default:"N/A" }}</td>
+                                <td><a href="{% url 'detalle_movimiento_salida' salida.id %}" class="btn btn-sm btn-primary">Ver</a></td>
+                            </tr>
+                            {% endfor %}
+                            {% if not ultimos_ingresos and not ultimos_salidas %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">No hay movimientos registrados</td>
+                            </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>

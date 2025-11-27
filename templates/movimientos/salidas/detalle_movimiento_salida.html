@@ -4,6 +4,7 @@
 {% block content %}
 <h1>Detalle de Salida: #{{ salida.id }}</h1>
 <p><strong>Motivo:</strong> {{ salida.motivo }}</p>
+<p><strong>Usuario:</strong> {{ salida.usuario.nombre|default:"N/A" }}</p>
 <p><strong>Fecha:</strong> {{ salida.fecha }}</p>
 
 <h2>Productos</h2>
