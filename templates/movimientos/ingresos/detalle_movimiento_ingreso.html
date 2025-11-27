@@ -3,6 +3,7 @@
 <h1>Detalle de Ingreso: {{ ingreso.numero_documento }}</h1>
 <p><strong>Proveedor:</strong> {{ ingreso.proveedor }}</p>
 <p><strong>Tipo de documento:</strong> {{ ingreso.tipo_documento }}</p>
+<p><strong>Usuario:</strong> {{ ingreso.usuario.nombre|default:"N/A" }}</p>
 <p><strong>Fecha:</strong> {{ ingreso.fecha }}</p>
 
 <h2>Productos</h2>

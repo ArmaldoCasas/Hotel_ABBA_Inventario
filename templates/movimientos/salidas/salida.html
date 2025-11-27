@@ -1,6 +1,11 @@
 {% extends 'base.html' %} {% block title %} Registrar Salida - Hotel ABBA
 {% endblock %} {% block content %}
 <h1>Registrar Salida</h1>
+{% if error %}
+<div class="alert alert-danger" role="alert">
+  {{ error }}
+</div>
+{% endif %}
 {% if not salida_id %}
 <div class="alert alert-warning" role="alert">
   Para poder agregar productos, primero debe guardar los datos iniciales de la
@@ -38,25 +43,42 @@
 {% if movimientos %}
 <hr />
 <h3>Productos agregados</h3>
-<div class="table-responsive">
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Producto</th>
-        <th>Cantidad</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for mov in movimientos %}
-      <tr>
-        <td>{{ mov.producto_nombre }}</td>
-        <td>{{ mov.cantidad }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-<form method="post" style="display: inline">
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Producto</th>
+      <th>Cantidad</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for mov in movimientos %}
+    <tr>
+      <td>{{ mov.producto_nombre }}</td>
+      <td>{{ mov.cantidad }}</td>
+      <td>
+        {% if request.GET.edit == forloop.counter0|stringformat:"s" %}
+          <form method="post" class="d-flex align-items-center">
+            {% csrf_token %}
+            <input type="hidden" name="indice" value="{{ forloop.counter0 }}">
+            <input name="cantidad" type="number" step="0.01" min="0.01" class="form-control form-control-sm me-2" value="{{ mov.cantidad }}" required>
+            <button name="guardar_edicion_salida" class="btn btn-sm btn-primary me-2" type="submit">Guardar</button>
+            <a href="{% url 'salida' %}" class="btn btn-sm btn-secondary">Cancelar</a>
+          </form>
+        {% else %}
+          <a href="?edit={{ forloop.counter0 }}" class="btn btn-sm btn-warning me-2">Editar</a>
+          <form method="post" style="display:inline">
+            {% csrf_token %}
+            <input type="hidden" name="indice" value="{{ forloop.counter0 }}">
+            <button name="eliminar_producto_salida" class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+          </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<form method="post" style="display:inline">
   {% csrf_token %}
   <button name="guardar_salida" class="btn btn-success" type="submit">
     Guardar Salida

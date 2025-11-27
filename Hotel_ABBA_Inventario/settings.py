@@ -277,6 +277,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 HOSTNAME = config('HOSTNAME')
 CSRF_TRUSTED_ORIGINS = [f"{HOSTNAME}"]
 
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+#Configuración de Sesiones
+#Definir el tiempo de inactividad (en segundos)
+#Ejemplo: 1200 segundos = 20 minutos.
+SESSION_COOKIE_AGE = 1200
+
+#Hacer que la sesión expire al cerrar el navegador
+#Esto es vital para equipos compartidos. Si cierran la ventana, se van.
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+#Renovar la sesión con cada petición (opcional pero recomendado)
+#Si el usuario sigue activo, el contador de tiempo se reinicia.
+#Así no se le cierra la sesión mientras está trabajando.
+SESSION_SAVE_EVERY_REQUEST = True
+
+SESSION_COOKIE_HTTPONLY = True
