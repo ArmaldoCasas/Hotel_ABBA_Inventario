@@ -91,6 +91,10 @@ def export_inventory(request):
     #sacar numero de id reportes
     reporte_id = reporte.id
     
+    # Asegurarse de que el directorio media exista
+    if not os.path.exists('media'):
+        os.makedirs('media')
+
     # Nombre del archivo
     filename = f'media/reporte_stock_{reporte_id}.xlsx'
     
