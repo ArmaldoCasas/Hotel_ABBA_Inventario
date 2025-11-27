@@ -17,6 +17,7 @@
                 <tr>
                     <th>Nombre de la Categoría</th>
                     <th>Productos en esta Categoría</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +36,13 @@
                             </ul>
                         {% else %}
                             <span class="text-muted">No hay productos en esta categoría</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not categoria.producto_set.all %}
+                            <a href="{% url 'eliminar_categoria' categoria.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta categoría?')">Eliminar</a>
+                        {% else %}
+                            <span class="text-muted">No se puede eliminar</span>
                         {% endif %}
                     </td>
                 </tr>
