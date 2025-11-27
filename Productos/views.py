@@ -13,7 +13,7 @@ def listado_productos(request):
 
     # verificar que el usuario tenga permisos
     if not 2 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     Productos = Producto.objects.all()
     Categorias = Categoria.objects.all()
@@ -54,7 +54,7 @@ def Agregar_Productos(request):
 
     # verificar que el usuario tenga permisos
     if not 3 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     if request.method == "POST":
         formulario_productos = ProductoForm(request.POST)
@@ -71,7 +71,7 @@ def editar_Productos(request,producto_id):
         return redirect('login')
      
     if not 3 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     producto = get_object_or_404(Producto, pk=producto_id)
     if not producto.esta_activo :
@@ -114,7 +114,7 @@ def listado_categorias(request):
 
     # verificar que el usuario tenga permisos
     if not 4 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     # Obtener categorías
     Categorias = Categoria.objects.all() 
@@ -131,7 +131,7 @@ def agregar_categorias(request):
 
     # verificar que el usuario tenga permisos
     if not 5 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     if request.method == 'POST':
         formulario_categorias = CategoriaForm(request.POST)
@@ -150,7 +150,7 @@ def listado_proveedores(request):
 
     # verificar que el usuario tenga permisos
     if not 6 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     # Obtener proveedores
     Proveedores = Proveedor.objects.all() 
@@ -165,7 +165,7 @@ def agregar_proveedores(request):
         return redirect('login')
 
     if not 7 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     if request.method == 'POST':
         formulario_proveedores = ProveedorForm(request.POST)
@@ -184,7 +184,7 @@ def listado_ubicacion(request):
 
     # verificar que el usuario tenga permisos
     if not 8 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     # Obtener ubicaciones con prefetch de productos
     Ubicaciones = Ubicacion.objects.prefetch_related('producto_set').all() 
@@ -199,7 +199,7 @@ def agregar_ubicacion(request):
         return redirect('login')
 
     if not 9 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
 
     if request.method == 'POST':
         formulario_ubicacion = UbicacionForm(request.POST)
@@ -216,7 +216,7 @@ def eliminar_categoria(request, categoria_id):
         return redirect('login')
 
     if not 5 in request.session.get('permisos'):  # mismo permiso que agregar
-        return redirect('inicio')
+        return redirect('error')
 
     categoria = get_object_or_404(Categoria, pk=categoria_id)
     if categoria.producto_set.exists():
@@ -231,7 +231,7 @@ def eliminar_proveedor(request, proveedor_id):
         return redirect('login')
 
     if not 7 in request.session.get('permisos'):  # mismo permiso que agregar
-        return redirect('inicio')
+        return redirect('error')
 
     proveedor = get_object_or_404(Proveedor, pk=proveedor_id)
     if proveedor.productos.exists():

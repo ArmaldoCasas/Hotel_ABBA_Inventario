@@ -15,7 +15,7 @@ def listado_reportes(request):
         return redirect('login')
     # verificar que el usuario tenga permisos
     if not 11 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
     reportes = Reporte.objects.all()
     return render(request, 'reportes/listado_reportes.html', {'reportes': reportes})
 
@@ -26,7 +26,7 @@ def export_inventory(request):
 
     # verificar que el usuario tenga permisos
     if not 11 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
     
     #verificar que hayan productos
     if not Producto.objects.exists():
@@ -109,7 +109,7 @@ def descargar_reporte(request, reporte_id):
         return redirect('login')
     # verificar que el usuario tenga permisos
     if not 11 in request.session.get('permisos'):
-        return redirect('inicio')
+        return redirect('error')
     
     filename = f'media/reporte_stock_{reporte_id}.xlsx'
     
