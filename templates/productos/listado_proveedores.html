@@ -21,6 +21,7 @@
                     <th>Dirección</th>
                     <th>Descripción</th>
                     <th>Productos que Suministra</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,6 +44,13 @@
                             </ul>
                         {% else %}
                             <span class="text-muted">No suministra productos</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not prov.productos.all %}
+                            <a href="{% url 'eliminar_proveedor' prov.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este proveedor?')">Eliminar</a>
+                        {% else %}
+                            <span class="text-muted">No se puede eliminar</span>
                         {% endif %}
                     </td>
                 </tr>
