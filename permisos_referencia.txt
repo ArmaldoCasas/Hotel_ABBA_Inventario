@@ -17,12 +17,17 @@ PROVEEDORES
 6: Listado de proveedores
 7: Agregar nuevos proveedores
 
-USUARIOS (Reservado para futuro)
+USUARIOS
 --------------------------------
 8: Listado de usuarios
 9: Crear usuarios
+10: Editar usuarios y gestionar roles
 
-REPORTES (Reservado para futuro)
+REPORTES
 --------------------------------
-10: Listado de reportes
+11: Listado de reportes
 
+UBICACIONES
+-----------
+12: Listado de ubicaciones
+13: Agregar nuevas ubicaciones

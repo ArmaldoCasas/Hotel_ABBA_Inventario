@@ -18,12 +18,17 @@ def listado_productos(request):
     Categorias = Categoria.objects.all()
     Proveedores = Proveedor.objects.all()
     Ubicaciones = Ubicacion.objects.all()
-
     # Filtros
     nombre = request.GET.get('nombre')
     categoria_id = request.GET.get('categoria')
     proveedor_id = request.GET.get('proveedor')
     ubicacion_id = request.GET.get('ubicacion')
+    estado = request.GET.get('estado')
+
+    if estado in ["Activo", "activo"]:
+        Productos = Productos.filter(esta_activo=True)
+    elif estado in ["Inactivo", "inactivo"]:
+        Productos = Productos.filter(esta_activo=False)
 
     if nombre:
         Productos = Productos.filter(nombre__icontains=nombre)
@@ -36,13 +41,16 @@ def listado_productos(request):
 
     if ubicacion_id:
         Productos = Productos.filter(ubicacion_id=ubicacion_id)
+    
 
+    
     return render(request,"productos/listado_productos.html",{
         "titulo":"Listado de Productos",
         "Productos": Productos,
         "Categorias": Categorias,
         "Proveedores": Proveedores,
-        "Ubicaciones": Ubicaciones
+        "Ubicaciones": Ubicaciones,
+        "estado": estado
     })
 
     
@@ -182,7 +190,7 @@ def listado_ubicacion(request):
         return redirect('login')
 
     # verificar que el usuario tenga permisos
-    if not 8 in request.session.get('permisos'):
+    if not 12 in request.session.get('permisos'):
         return redirect('inicio')
 
     # Obtener ubicaciones con prefetch de productos
@@ -197,7 +205,7 @@ def agregar_ubicacion(request):
     if not request.session.get('user_id'):
         return redirect('login')
 
-    if not 9 in request.session.get('permisos'):
+    if not 13 in request.session.get('permisos'):
         return redirect('inicio')
 
     if request.method == 'POST':

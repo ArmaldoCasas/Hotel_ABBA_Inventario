@@ -14,8 +14,14 @@
   </head>
   <body class="h-100">
     {% block navbar %}
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-nav-toggle" id="sidebarToggle">&#9776; Menu</button>
+
+    <!-- Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <link rel="stylesheet" href="{% static 'css/basehtml.css' %}" />
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <div class="logo">Hotel ABBA</div>
       <ul class="menu">
         <li><a href="/inicio">Inicio</a></li>
@@ -35,5 +41,25 @@
     <main class="main-with-sidebar">
       {% block content %} {% endblock content %}
     </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        const toggleBtn = document.getElementById("sidebarToggle");
+
+        function toggleSidebar() {
+          sidebar.classList.toggle("active");
+          overlay.classList.toggle("active");
+        }
+
+        if (toggleBtn) {
+          toggleBtn.addEventListener("click", toggleSidebar);
+        }
+
+        if (overlay) {
+          overlay.addEventListener("click", toggleSidebar);
+        }
+      });
+    </script>
   </body>
 </html>
