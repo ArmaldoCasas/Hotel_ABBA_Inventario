@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect,get_object_or_404
+from django.contrib import messages
 from .models import Producto, Categoria, Proveedor, Ubicacion
 from .forms import ProductoForm, CategoriaForm, ProveedorForm, UbicacionForm
 
@@ -204,9 +205,39 @@ def agregar_ubicacion(request):
         formulario_ubicacion = UbicacionForm(request.POST)
         if formulario_ubicacion.is_valid():
             formulario_ubicacion.save()
-            return redirect('agregar_ubicacion') 
+            return redirect('agregar_ubicacion')
     else:
         formulario_ubicacion = UbicacionForm()
-    
+
     return render(request, 'productos/agregar_ubicacion.html', {'formulario_ubicacion': formulario_ubicacion})
+
+def eliminar_categoria(request, categoria_id):
+    if not request.session.get('user_id'):
+        return redirect('login')
+
+    if not 5 in request.session.get('permisos'):  # mismo permiso que agregar
+        return redirect('inicio')
+
+    categoria = get_object_or_404(Categoria, pk=categoria_id)
+    if categoria.producto_set.exists():
+        messages.error(request, f'No se puede eliminar la categoría "{categoria.nombre}" porque tiene productos asociados.')
+    else:
+        categoria.delete()
+        messages.success(request, f'Categoría "{categoria.nombre}" eliminada exitosamente.')
+    return redirect('listado_categorias')
+
+def eliminar_proveedor(request, proveedor_id):
+    if not request.session.get('user_id'):
+        return redirect('login')
+
+    if not 7 in request.session.get('permisos'):  # mismo permiso que agregar
+        return redirect('inicio')
+
+    proveedor = get_object_or_404(Proveedor, pk=proveedor_id)
+    if proveedor.productos.exists():
+        messages.error(request, f'No se puede eliminar el proveedor "{proveedor.nombre}" porque suministra productos.')
+    else:
+        proveedor.delete()
+        messages.success(request, f'Proveedor "{proveedor.nombre}" eliminado exitosamente.')
+    return redirect('listado_proveedores')
 

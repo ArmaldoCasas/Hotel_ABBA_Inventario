@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 UNIT_CHOICES = [
     ('ml', 'ml'),
     ('kg', 'kg'),
@@ -27,13 +28,13 @@ class Proveedor(models.Model):
         return self.nombre
 
 class Producto(models.Model):
-    nombre = models.CharField(max_length=200, unique=True)
-    contenido = models.FloatField(default=0)
+    nombre = models.CharField(max_length=100, unique=True)
+    contenido = models.FloatField(default=0, validators=[MinValueValidator(0)])
     unidad = models.CharField(max_length=50, choices=UNIT_CHOICES, default='kg') 
     precio = models.PositiveIntegerField(default=0)
     # Umbral mínimo para alertar bajo stock
-    umbral = models.FloatField(default=5)
-    stock = models.FloatField(default=0)
+    umbral = models.FloatField(default=5, validators=[MinValueValidator(0)])
+    stock = models.FloatField(default=0, validators=[MinValueValidator(0)])
     esta_activo = models.BooleanField(default=True)
     ubicacion = models.ForeignKey('Ubicacion', on_delete=models.SET_NULL, null=True)
     categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True,)
