@@ -11,11 +11,11 @@ class Ingreso(models.Model):
     ]
     tipo_documento = models.CharField(max_length=10, choices=TIPO_DOCUMENTO_CHOICES)
     numero_documento = models.CharField(
-        max_length=8,
+        max_length=30,
         unique=True,
         validators=[RegexValidator(
-                regex=r'^\d{8}$',
-                message='El número de documento debe tener exactamente 8 dígitos numéricos.')])
+                regex=r'^\d+$',
+                message='El número de documento debe ser un valor numérico.')])
     fecha = models.DateTimeField(auto_now_add=True)
     productos = models.ManyToManyField('Productos.Producto',through='MovimientoIngreso',related_name='ingresos')
     def __str__(self):

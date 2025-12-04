@@ -24,9 +24,9 @@
                 <tr>
                     <td><strong>{{ ubicacion.nombre }}</strong></td>
                     <td>
-                        {% if ubicacion.producto_set.all %}
+                        {% if ubicacion.productos.all %}
                             <ul class="list-unstyled mb-0">
-                                {% for producto in ubicacion.producto_set.all %}
+                                {% for producto in ubicacion.productos.all %}
                                 <li>
                                     {{ producto.nombre }} 
                                     <span class="badge bg-info">Stock: {{ producto.stock }}</span>

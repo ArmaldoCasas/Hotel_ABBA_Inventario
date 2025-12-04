@@ -63,16 +63,16 @@ def export_inventory(request):
 
     # Escribir los datos en la hoja
     for producto in productos:
-        ubicacion = producto.ubicacion.nombre if producto.ubicacion else 'N/A'
         categoria = producto.categoria.nombre if producto.categoria else 'N/A'
         proveedores = ', '.join([p.nombre for p in producto.proveedores.all()])
+        ubicaciones = ', '.join([p.nombre for p in producto.ubicacion.all()])
         row = [
             producto.id,
             producto.nombre,
             producto.precio,
             producto.umbral,
             producto.stock,
-            ubicacion,
+            ubicaciones,
             producto.contenido,
             producto.unidad,
             categoria,

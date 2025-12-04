@@ -1,5 +1,5 @@
 from django import forms
-from .models import Producto, Proveedor, ProveedorProducto, Categoria, Ubicacion
+from .models import Producto, Proveedor, ProveedorProducto, Categoria, Ubicacion, ProductoUbicacion
 
 class ProductoForm(forms.ModelForm):
     proveedores_seleccionados = forms.ModelMultipleChoiceField(
@@ -8,10 +8,16 @@ class ProductoForm(forms.ModelForm):
         label="Proveedores",
         required=False
     )
+    ubicaciones_seleccionados = forms.ModelMultipleChoiceField(
+        queryset=Ubicacion.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Ubicaciones",
+        required=False
+    )
     
     class Meta:
         model = Producto
-        fields = ['nombre', 'contenido', 'unidad', 'precio', 'umbral', 'stock', 'ubicacion', 'categoria']
+        fields = ['nombre', 'contenido', 'unidad', 'precio', 'umbral', 'stock', 'categoria']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'contenido': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -19,7 +25,6 @@ class ProductoForm(forms.ModelForm):
             'precio': forms.NumberInput(attrs={'class': 'form-control'}),
             'umbral': forms.NumberInput(attrs={'class': 'form-control'}),
             'stock': forms.NumberInput(attrs={'class': 'form-control'}),
-            'ubicacion': forms.Select(attrs={'class': 'form-select'}),
             'categoria': forms.Select(attrs={'class': 'form-select'}),
         }
     
@@ -41,6 +46,20 @@ class ProductoForm(forms.ModelForm):
                     ProveedorProducto.objects.create(
                         producto=producto,
                         proveedor=proveedor
+                    )
+            
+            # 3. Guardar la relación Muchos a Muchos con Ubicaciones manualmente
+            ubicaciones = self.cleaned_data.get('ubicaciones_seleccionados')
+            
+            # Limpiamos relaciones anteriores de ubicaciones
+            ProductoUbicacion.objects.filter(producto=producto).delete()
+
+            # Creamos las nuevas relaciones con ubicaciones
+            if ubicaciones:
+                for ubicacion in ubicaciones:
+                    ProductoUbicacion.objects.create(
+                        producto=producto,
+                        ubicacion=ubicacion
                     )
         return producto
 

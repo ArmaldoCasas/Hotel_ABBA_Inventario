@@ -7,9 +7,8 @@ from decimal import Decimal
 
 class IngresoForm(forms.ModelForm):
     numero_documento = forms.CharField(
-        max_length=8,
-        min_length=8,
-        validators=[RegexValidator(regex=r'^\d{8}$', message='El número de documento debe tener exactamente 8 dígitos numéricos.')],
+        max_length=30,
+        validators=[RegexValidator(regex=r'^\d+$', message='El número de documento solo puede tener valores numéricos')],
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Número de documento'})
     )
     class Meta:

@@ -36,7 +36,13 @@ def listado_productos(request):
         Productos = Productos.filter(proveedores__id=proveedor_id)
 
     if ubicacion_id:
-        Productos = Productos.filter(ubicacion_id=ubicacion_id)
+        Productos = Productos.filter(ubicacion__id=ubicacion_id)
+
+    estado = request.GET.get('estado')
+    if estado == 'Activo':
+        Productos = Productos.filter(esta_activo=True)
+    elif estado == 'Inactivo':
+        Productos = Productos.filter(esta_activo=False)
 
     return render(request,"productos/listado_productos.html",{
         "titulo":"Listado de Productos",
@@ -60,7 +66,7 @@ def Agregar_Productos(request):
         formulario_productos = ProductoForm(request.POST)
         if formulario_productos.is_valid():
             formulario_productos.save()
-            return redirect("agregar_productos")    
+            return redirect("listado_productos")    
     else:
         formulario_productos=ProductoForm()
     return render(request, "productos/agregar_productos.html", {"formulario_productos":formulario_productos})
@@ -86,17 +92,22 @@ def editar_Productos(request,producto_id):
     else:
         formulario_productos = ProductoForm(
             instance=producto,
-            initial={'proveedores_seleccionados': producto.proveedores.all()}
+            initial={
+                'proveedores_seleccionados': producto.proveedores.all(),
+                'ubicaciones_seleccionados': producto.ubicacion.all()
+            }
         )
 
 
     categorias = Categoria.objects.all()
     proveedores = Proveedor.objects.all()
+    ubicacion = Ubicacion.objects.all()
     return render(request, 'productos/agregar_productos.html', {
         'formulario_productos': formulario_productos, 
         'categorias': categorias,
         'proveedores': proveedores,
         'producto': producto,
+        'ubicaciones': ubicacion,
     })
 
 def cambiar_estado_producto(request,producto_id):
@@ -137,7 +148,7 @@ def agregar_categorias(request):
         formulario_categorias = CategoriaForm(request.POST)
         if formulario_categorias.is_valid():
             formulario_categorias.save()
-            return redirect("agregar_categorias") 
+            return redirect("listado_categorias") 
     else:
         formulario_categorias = CategoriaForm()
     
@@ -171,7 +182,7 @@ def agregar_proveedores(request):
         formulario_proveedores = ProveedorForm(request.POST)
         if formulario_proveedores.is_valid():
             formulario_proveedores.save()
-            return redirect('agregar_proveedores') 
+            return redirect('listado_proveedores') 
     else:
         formulario_proveedores = ProveedorForm()
     
@@ -187,7 +198,7 @@ def listado_ubicacion(request):
         return redirect('error')
 
     # Obtener ubicaciones con prefetch de productos
-    Ubicaciones = Ubicacion.objects.prefetch_related('producto_set').all() 
+    Ubicaciones = Ubicacion.objects.prefetch_related('productos').all() 
     return render(request,"productos/listado_ubicacion.html",{
         "titulo":"Listado de Ubicaciones",
         "Ubicaciones": Ubicaciones 
@@ -205,7 +216,7 @@ def agregar_ubicacion(request):
         formulario_ubicacion = UbicacionForm(request.POST)
         if formulario_ubicacion.is_valid():
             formulario_ubicacion.save()
-            return redirect('agregar_ubicacion')
+            return redirect('listado_ubicacion')
     else:
         formulario_ubicacion = UbicacionForm()
 

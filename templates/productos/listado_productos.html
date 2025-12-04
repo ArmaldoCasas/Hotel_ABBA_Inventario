@@ -77,8 +77,8 @@
                     <th>Precio</th>
                     <th>Umbral</th>
                     <th>Stock</th>
-                    <th>Ubicacion </th>
                     <th>Categoria</th>
+                    <th>Ubicacion </th>
                     <th>Proveedores</th>
                 </tr>
             </thead>
@@ -91,8 +91,12 @@
                     <td>{{prod.precio}}</td>
                     <td>{{prod.umbral}}</td>
                     <td>{{prod.stock}}</td>
-                    <td>{{prod.ubicacion}}</td>
                     <td>{{prod.categoria}}</td>
+                    <td>
+                        {% for ubi in prod.ubicacion.all %}
+                            {{ ubi.nombre }} {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>   
                     <td>
                         {% for prov in prod.proveedores.all %}
                             {{ prov.nombre }} {% if not forloop.last %}, {% endif %}

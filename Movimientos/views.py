@@ -5,6 +5,11 @@ from Productos.models import Producto
 from login.models import Usuarios
 
 def listado_movimientos(request):
+    if not request.session.get('user_id'):
+        return redirect('login')
+    if 14 not in request.session.get('permisos', []):
+        return redirect('listado_movimientos')
+    
     Movimientos_Ingreso = Ingreso.objects.all().order_by('-fecha')[:5]
     Movimientos_Salida = Salida.objects.all().order_by('-fecha')[:5]
     return render(request, "movimientos/listado_movimientos.html", {

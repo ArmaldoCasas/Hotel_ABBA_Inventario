@@ -36,7 +36,11 @@ class Producto(models.Model):
     umbral = models.FloatField(default=5, validators=[MinValueValidator(0)])
     stock = models.FloatField(default=0, validators=[MinValueValidator(0)])
     esta_activo = models.BooleanField(default=True)
-    ubicacion = models.ForeignKey('Ubicacion', on_delete=models.SET_NULL, null=True)
+    ubicacion = models.ManyToManyField(
+        'Ubicacion',
+        through='Productos.ProductoUbicacion',
+        related_name='productos'
+    )
     categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True,)
     proveedores = models.ManyToManyField(
         'Proveedor',
@@ -54,6 +58,11 @@ class ProveedorProducto(models.Model) :
 
 class Ubicacion(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
-    
     def __str__(self):
         return self.nombre
+
+class ProductoUbicacion(models.Model):
+    producto = models.ForeignKey('Producto', on_delete=models.CASCADE)
+    ubicacion = models.ForeignKey('Ubicacion', on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.producto.nombre} se encuentra en {self.ubicacion.nombre}"

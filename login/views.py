@@ -30,9 +30,17 @@ def create_user_view(request):
 
         user = Usuarios(nombre=username)
         user.set_password(password)
+        
+        # Asignar rol por defecto 'Usuario'
+        try:
+            rol_usuario = Roles.objects.get(nombre_rol='Usuario')
+            user.rol = rol_usuario
+        except Roles.DoesNotExist:
+            pass
+            
         user.save()
         messages.success(request, 'Usuario creado exitosamente')
-        return redirect('login')
+        return redirect('listado_usuarios')
         
     return render(request, 'login/registrar.html')
 

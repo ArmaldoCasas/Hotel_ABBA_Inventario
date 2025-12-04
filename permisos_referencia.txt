@@ -31,3 +31,9 @@ UBICACIONES
 -----------
 12: Listado de ubicaciones
 13: Agregar nuevas ubicaciones
+
+MOVIMIENTOS
+-----------
+14: Listado de movimientos
+15: Ingreso de productos
+16: Salida de productos
