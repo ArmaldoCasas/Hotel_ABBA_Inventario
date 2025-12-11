@@ -12,27 +12,40 @@
         <a href="{% url "gestionar_roles" %}" class="btn btn-info">Gestionar Roles y Permisos</a>
     </div>
 
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nombre de Usuario</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in usuarios %}
-                <tr>
-                    <td>{{usuario.nombre}}</td>
-                    <td>{{usuario.rol.nombre_rol|default:"Sin Rol"}}</td>
-                    <td>
-                        <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-sm btn-secondary">Editar Rol</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4 py-3">
+             <h5 class="card-title mb-0 fw-bold">Gestión de Usuarios</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive rounded-bottom-4">
+                <table class="table table-hover table-striped align-middle mb-0">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th class="py-3">Nombre de Usuario</th>
+                            <th class="py-3">Rol</th>
+                            <th class="py-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td class="fw-bold">{{usuario.nombre}}</td>
+                            <td>
+                                {% if usuario.rol.nombre_rol %}
+                                    <span class="badge bg-info text-dark">{{usuario.rol.nombre_rol}}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Sin Rol</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-sm btn-outline-primary rounded-pill"><i class="bi bi-pencil-fill me-1"></i>Editar Rol</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
   </div>
 </div>

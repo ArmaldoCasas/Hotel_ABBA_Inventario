@@ -11,36 +11,44 @@
         <a href={% url "agregar_ubicacion" %} class="btn btn-primary">Agregar Ubicación</a>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre de la Ubicación</th>
-                    <th>Productos en esta Ubicación</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for ubicacion in Ubicaciones %}
-                <tr>
-                    <td><strong>{{ ubicacion.nombre }}</strong></td>
-                    <td>
-                        {% if ubicacion.productos.all %}
-                            <ul class="list-unstyled mb-0">
-                                {% for producto in ubicacion.productos.all %}
-                                <li>
-                                    {{ producto.nombre }} 
-                                    <span class="badge bg-info">Stock: {{ producto.stock }}</span>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <span class="text-muted">No hay productos en esta ubicación</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4 py-3 d-flex justify-content-between align-items-center">
+             <h5 class="card-title mb-0 fw-bold">Ubicaciones</h5>
+             <a href="{% url "agregar_ubicacion" %}" class="btn btn-light rounded-pill btn-sm fw-bold"><i class="bi bi-plus-circle me-1"></i>Agregar Ubicación</a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive rounded-bottom-4">
+                <table class="table table-hover table-striped align-middle mb-0">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th class="py-3">Nombre de la Ubicación</th>
+                            <th class="py-3">Productos en esta Ubicación</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for ubicacion in Ubicaciones %}
+                        <tr>
+                            <td class="fw-bold">{{ ubicacion.nombre }}</td>
+                            <td class="text-start">
+                                {% if ubicacion.productos.all %}
+                                    <ul class="list-unstyled mb-0">
+                                        {% for producto in ubicacion.productos.all %}
+                                        <li>
+                                            <i class="bi bi-box-seam me-1"></i>{{ producto.nombre }} 
+                                            <span class="badge bg-info text-dark ms-1">Stock: {{ producto.stock }}</span>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <span class="text-muted fst-italic">No hay productos en esta ubicación</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
   </div>
 </div>
