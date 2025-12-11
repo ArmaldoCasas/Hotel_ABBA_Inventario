@@ -2,77 +2,133 @@
 {% endblock %} {% block content %}
 <div class="main-content">
   <h1>Listado de Movimientos</h1>
-  <div class="mb-3">
-    <a href="{% url 'ingreso' %}" class="btn btn-success">Agregar Ingreso</a>
-    <a href="{% url 'salida' %}" class="btn btn-danger">Agregar Salida</a>
+  <div class="d-flex gap-2 mb-4">
+    <a href="{% url 'ingreso' %}" class="btn btn-success rounded-pill fw-bold"
+      ><i class="bi bi-arrow-down-circle me-2"></i>Agregar Ingreso</a
+    >
+    <a href="{% url 'salida' %}" class="btn btn-danger rounded-pill fw-bold"
+      ><i class="bi bi-arrow-up-circle me-2"></i>Agregar Salida</a
+    >
   </div>
 
-  <h2>Movimientos de Ingreso</h2>
-  <div class="mb-3">
-    <a href="{% url 'listado_movimientos_ingreso' %}" class="btn btn-info">Ver todos los ingresos</a>
-  </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Tipo Documento</th>
-        <th>Número Documento</th>
-        <th>Usuario</th>
-        <th>Fecha</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for movimiento in Movimientos_Ingreso %}
-      <tr>
-        <td>{{ movimiento.id }}</td>
-        <td>{{ movimiento.tipo_documento }}</td>
-        <td>{{ movimiento.numero_documento }}</td>
-        <td>{{ movimiento.usuario.nombre|default:"N/A" }}</td>
-        <td>{{ movimiento.fecha }}</td>
-        <td>
-          <a href="{% url 'detalle_movimiento_ingreso' movimiento.id %}" class="btn btn-primary btn-sm">Detalle</a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="6" class="text-center">No hay movimientos de ingreso</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="row">
+    <!-- Ingresos Card -->
+    <div class="col-12 mb-4">
+      <div class="card shadow border-0 rounded-4">
+        <div
+          class="card-header bg-success text-white rounded-top-4 py-3 d-flex justify-content-between align-items-center"
+        >
+          <h5 class="card-title mb-0 fw-bold">Movimientos de Ingreso</h5>
+          <a
+            href="{% url 'listado_movimientos_ingreso' %}"
+            class="btn btn-light btn-sm rounded-pill fw-bold"
+            >Ver Todos</a
+          >
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive rounded-bottom-4">
+            <table class="table table-hover table-striped align-middle mb-0">
+              <thead class="table-light text-center">
+                <tr>
+                  <th class="py-3">ID</th>
+                  <th class="py-3">Tipo Documento</th>
+                  <th class="py-3">Número Documento</th>
+                  <th class="py-3">Usuario</th>
+                  <th class="py-3">Fecha</th>
+                  <th class="py-3">Acciones</th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                {% for movimiento in Movimientos_Ingreso %}
+                <tr>
+                  <td>{{ movimiento.id }}</td>
+                  <td>
+                    <span class="badge bg-secondary"
+                      >{{ movimiento.tipo_documento }}</span
+                    >
+                  </td>
+                  <td class="fw-bold">{{ movimiento.numero_documento }}</td>
+                  <td>{{ movimiento.usuario.nombre|default:"N/A" }}</td>
+                  <td>{{ movimiento.fecha }}</td>
+                  <td>
+                    <a
+                      href="{% url 'detalle_movimiento_ingreso' movimiento.id %}"
+                      class="btn btn-outline-primary btn-sm rounded-pill"
+                      >Detalle</a
+                    >
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="6" class="text-center text-muted py-4">
+                    No hay movimientos de ingreso
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <h2 class="mt-5">Movimientos de Salida</h2>
-  <div class="mb-3">
-    <a href="{% url 'listado_movimientos_salida' %}" class="btn btn-info">Ver todas las salidas</a>
+    <!-- Salidas Card -->
+    <div class="col-12 mb-4">
+      <div class="card shadow border-0 rounded-4">
+        <div
+          class="card-header bg-danger text-white rounded-top-4 py-3 d-flex justify-content-between align-items-center"
+        >
+          <h5 class="card-title mb-0 fw-bold">Movimientos de Salida</h5>
+          <a
+            href="{% url 'listado_movimientos_salida' %}"
+            class="btn btn-light btn-sm rounded-pill fw-bold"
+            >Ver Todos</a
+          >
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive rounded-bottom-4">
+            <table class="table table-hover table-striped align-middle mb-0">
+              <thead class="table-light text-center">
+                <tr>
+                  <th class="py-3">ID</th>
+                  <th class="py-3">Motivo</th>
+                  <th class="py-3">Usuario</th>
+                  <th class="py-3">Fecha</th>
+                  <th class="py-3">Acciones</th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                {% for movimiento in Movimientos_Salida %}
+                <tr>
+                  <td>{{ movimiento.id }}</td>
+                  <td>
+                    <span class="badge bg-secondary"
+                      >{{ movimiento.motivo }}</span
+                    >
+                  </td>
+                  <td>{{ movimiento.usuario.nombre|default:"N/A" }}</td>
+                  <td>{{ movimiento.fecha }}</td>
+                  <td>
+                    <a
+                      href="{% url 'detalle_movimiento_salida' movimiento.id %}"
+                      class="btn btn-outline-primary btn-sm rounded-pill"
+                      >Detalle</a
+                    >
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center text-muted py-4">
+                    No hay movimientos de salida
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Motivo</th>
-        <th>Usuario</th>
-        <th>Fecha</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for movimiento in Movimientos_Salida %}
-      <tr>
-        <td>{{ movimiento.id }}</td>
-        <td>{{ movimiento.motivo }}</td>
-        <td>{{ movimiento.usuario.nombre|default:"N/A" }}</td>
-        <td>{{ movimiento.fecha }}</td>
-        <td>
-          <a href="{% url 'detalle_movimiento_salida' movimiento.id %}" class="btn btn-primary btn-sm">Detalle</a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="5" class="text-center">No hay movimientos de salida</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
 </div>
 {% endblock %}

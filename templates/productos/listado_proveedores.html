@@ -11,52 +11,60 @@
         <a href={% url "agregar_proveedores" %} class="btn btn-primary">Agregar Proveedor</a>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Teléfono</th>
-                    <th>Email</th>
-                    <th>Dirección</th>
-                    <th>Descripción</th>
-                    <th>Productos que Suministra</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for prov in Proveedor %}
-                <tr>
-                    <td><strong>{{ prov.nombre }}</strong></td>
-                    <td>{{ prov.telefono }}</td>
-                    <td>{{ prov.email }}</td>
-                    <td>{{ prov.direccion }}</td>
-                    <td>{{ prov.descripcion }}</td>
-                    <td>
-                        {% if prov.productos.all %}
-                            <ul class="list-unstyled mb-0">
-                                {% for producto in prov.productos.all %}
-                                <li>
-                                    {{ producto.nombre }}
-                                    <span class="badge bg-success">Stock: {{ producto.stock }}</span>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <span class="text-muted">No suministra productos</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if not prov.productos.all %}
-                            <a href="{% url 'eliminar_proveedor' prov.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este proveedor?')">Eliminar</a>
-                        {% else %}
-                            <span class="text-muted">No se puede eliminar</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4 py-3 d-flex justify-content-between align-items-center">
+             <h5 class="card-title mb-0 fw-bold">Proveedores</h5>
+             <a href="{% url "agregar_proveedores" %}" class="btn btn-light rounded-pill btn-sm fw-bold"><i class="bi bi-plus-circle me-1"></i>Agregar Proveedor</a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive rounded-bottom-4">
+                <table class="table table-hover table-striped align-middle mb-0">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th class="py-3">Nombre</th>
+                            <th class="py-3">Teléfono</th>
+                            <th class="py-3">Email</th>
+                            <th class="py-3">Dirección</th>
+                            <th class="py-3">Descripción</th>
+                            <th class="py-3">Productos que Suministra</th>
+                            <th class="py-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for prov in Proveedor %}
+                        <tr>
+                            <td class="fw-bold">{{ prov.nombre }}</td>
+                            <td>{{ prov.telefono }}</td>
+                            <td>{{ prov.email }}</td>
+                            <td>{{ prov.direccion }}</td>
+                            <td>{{ prov.descripcion }}</td>
+                            <td class="text-start">
+                                {% if prov.productos.all %}
+                                    <ul class="list-unstyled mb-0">
+                                        {% for producto in prov.productos.all %}
+                                        <li>
+                                            <i class="bi bi-dot me-1"></i>{{ producto.nombre }}
+                                            <span class="badge bg-success ms-1">Stock: {{ producto.stock }}</span>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <span class="text-muted fst-italic">No suministra productos</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if not prov.productos.all %}
+                                    <a href="{% url 'eliminar_proveedor' prov.id %}" class="btn btn-outline-danger btn-sm rounded-pill" onclick="return confirm('¿Estás seguro de que quieres eliminar este proveedor?')"><i class="bi bi-trash-fill me-1"></i>Eliminar</a>
+                                {% else %}
+                                    <span class="badge bg-secondary">No se puede eliminar</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
   </div>
 </div>

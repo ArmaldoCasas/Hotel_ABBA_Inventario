@@ -11,44 +11,52 @@
         <a href={% url "agregar_categorias" %} class="btn btn-primary">Agregar Categoría</a>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre de la Categoría</th>
-                    <th>Productos en esta Categoría</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for categoria in Categorias %}
-                <tr>
-                    <td><strong>{{ categoria.nombre }}</strong></td>
-                    <td>
-                        {% if categoria.producto_set.all %}
-                            <ul class="list-unstyled mb-0">
-                                {% for producto in categoria.producto_set.all %}
-                                <li>
-                                    {{ producto.nombre }}
-                                    <span class="badge bg-primary">Stock: {{ producto.stock }}</span>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <span class="text-muted">No hay productos en esta categoría</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if not categoria.producto_set.all %}
-                            <a href="{% url 'eliminar_categoria' categoria.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta categoría?')">Eliminar</a>
-                        {% else %}
-                            <span class="text-muted">No se puede eliminar</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4 py-3 d-flex justify-content-between align-items-center">
+             <h5 class="card-title mb-0 fw-bold">Categorías</h5>
+             <a href="{% url "agregar_categorias" %}" class="btn btn-light rounded-pill btn-sm fw-bold"><i class="bi bi-plus-circle me-1"></i>Agregar Categoría</a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive rounded-bottom-4">
+                <table class="table table-hover table-striped align-middle mb-0">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th class="py-3">Nombre de la Categoría</th>
+                            <th class="py-3">Productos en esta Categoría</th>
+                            <th class="py-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for categoria in Categorias %}
+                        <tr>
+                            <td class="fw-bold">{{ categoria.nombre }}</td>
+                            <td class="text-start">
+                                {% if categoria.producto_set.all %}
+                                    <ul class="list-unstyled mb-0">
+                                        {% for producto in categoria.producto_set.all %}
+                                        <li>
+                                            <i class="bi bi-dot me-1"></i>{{ producto.nombre }}
+                                            <span class="badge bg-primary ms-1">Stock: {{ producto.stock }}</span>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <span class="text-muted fst-italic">No hay productos en esta categoría</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if not categoria.producto_set.all %}
+                                    <a href="{% url 'eliminar_categoria' categoria.id %}" class="btn btn-outline-danger btn-sm rounded-pill" onclick="return confirm('¿Estás seguro de que quieres eliminar esta categoría?')"><i class="bi bi-trash-fill me-1"></i>Eliminar</a>
+                                {% else %}
+                                    <span class="badge bg-secondary">No se puede eliminar</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
   </div>
 </div>
