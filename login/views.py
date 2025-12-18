@@ -183,13 +183,15 @@ def editar_usuario(request, user_id):
         return redirect('login')
         
     if not 10 in request.session.get('permisos', []):
-        messages.error(request, 'No tienes permisos para editar usuarios')
         return redirect('listado_usuarios')
 
     try:
         usuario = Usuarios.objects.get(id=user_id)
     except Usuarios.DoesNotExist:
-        messages.error(request, 'Usuario no encontrado')
+        return redirect('listado_usuarios')
+
+    # Prevent editing of Administrator users
+    if usuario.rol and usuario.rol.nombre_rol == 'Administrador':
         return redirect('listado_usuarios')
 
     if request.method == 'POST':
@@ -199,14 +201,11 @@ def editar_usuario(request, user_id):
                 rol = Roles.objects.get(id=rol_id)
                 usuario.rol = rol
                 usuario.save()
-                messages.success(request, 'Rol de usuario actualizado')
             except Roles.DoesNotExist:
-                messages.error(request, 'Rol no válido')
+                pass
         else:
             usuario.rol = None
             usuario.save()
-            messages.success(request, 'Rol removido del usuario')
-            
         return redirect('listado_usuarios')
 
     roles = Roles.objects.all()
@@ -214,6 +213,44 @@ def editar_usuario(request, user_id):
         'usuario': usuario,
         'roles': roles
     })
+
+
+def cambiar_password(request, user_id):
+    if not request.session.get('user_id'):
+        return redirect('login')
+        
+    if not 10 in request.session.get('permisos', []):
+        return redirect('listado_usuarios')
+
+    try:
+        usuario = Usuarios.objects.get(id=user_id)
+    except Usuarios.DoesNotExist:
+        messages.error(request, 'Usuario no encontrado')
+        return redirect('listado_usuarios')
+
+    # Prevent changing password of Administrator users
+    if usuario.rol and usuario.rol.nombre_rol == 'Administrador':
+        messages.error(request, 'No se puede cambiar la contraseña de un Administrador')
+        return redirect('listado_usuarios')
+
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if password != confirm_password:
+            messages.error(request, 'Las contraseñas no coinciden')
+            return redirect('cambiar_password', user_id=user_id)
+
+        if len(password) < 8:
+            messages.error(request, 'La contraseña debe tener al menos 8 caracteres')
+            return redirect('cambiar_password', user_id=user_id)
+
+        usuario.set_password(password)
+        usuario.save()
+        messages.success(request, 'Contraseña actualizada exitosamente')
+        return redirect('listado_usuarios')
+
+    return render(request, 'login/cambiar_contrasena.html', {'usuario': usuario})
 
 def error_view(request):
     return render(request, 'error.html')

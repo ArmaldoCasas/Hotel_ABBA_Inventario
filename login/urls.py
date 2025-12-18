@@ -11,4 +11,5 @@ urlpatterns = [
     path('error', views.error_view, name='error'),
     path('usuarios/', views.listado_usuarios, name='listado_usuarios'),
     path('usuarios/roles/', views.gestionar_roles, name='gestionar_roles'),
-    path('usuarios/editar/<int:user_id>/', views.editar_usuario, name='editar_usuario'),]
+    path('usuarios/editar/<int:user_id>/', views.editar_usuario, name='editar_usuario'),
+    path('usuarios/cambiar_password/<int:user_id>/', views.cambiar_password, name='cambiar_password'),]

@@ -252,3 +252,24 @@ def eliminar_proveedor(request, proveedor_id):
         messages.success(request, f'Proveedor "{proveedor.nombre}" eliminado exitosamente.')
     return redirect('listado_proveedores')
 
+
+def editar_proveedor(request, proveedor_id):
+    # verificar que el usuario este logueado
+    if not request.session.get('user_id'):
+        return redirect('login')
+
+    # verificar que el usuario tenga permisos
+    if not 7 in request.session.get('permisos'):
+        return redirect('error')
+
+    proveedor = get_object_or_404(Proveedor, pk=proveedor_id)
+
+    if request.method == 'POST':
+        formulario_proveedores = ProveedorForm(request.POST, instance=proveedor)
+        if formulario_proveedores.is_valid():
+            formulario_proveedores.save()
+            return redirect('listado_proveedores')
+    else:
+        formulario_proveedores = ProveedorForm(instance=proveedor)
+    
+    return render(request, 'productos/agregar_proveedores.html', {'formulario_proveedores': formulario_proveedores, 'proveedor': proveedor})

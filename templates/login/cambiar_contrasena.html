@@ -1,0 +1,67 @@
+{% extends "base.html" %} {% block title %}Cambiar Contraseña - Hotel ABBA{% endblock %} {% block content %}
+<div class="main-content">
+  <div class="container mt-4">
+    <div
+      class="card shadow border-0 rounded-4"
+      style="max-width: 500px; margin: 0 auto"
+    >
+    <div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+      <div class="card-header bg-primary text-white rounded-top-4 py-3">
+        <h5 class="card-title mb-0 fw-bold">Cambiar Contraseña</h5>
+      </div>
+      <div class="card-body p-4">
+        <h6 class="mb-3 text-muted">
+          Cambiando contraseña para:
+          <span class="fw-bold text-dark">{{ usuario.nombre }}</span>
+        </h6>
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="password" class="form-label">Nueva Contraseña</label>
+            <input
+              type="password"
+              class="form-control rounded-pill"
+              id="password"
+              name="password"
+              required
+              minlength="8"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="confirm_password" class="form-label"
+              >Confirmar Contraseña</label
+            >
+            <input
+              type="password"
+              class="form-control rounded-pill"
+              id="confirm_password"
+              name="confirm_password"
+              required
+              minlength="8"
+            />
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary rounded-pill fw-bold">
+              Guardar Contraseña
+            </button>
+            <a
+              href="{% url 'listado_usuarios' %}"
+              class="btn btn-secondary rounded-pill"
+              >Cancelar</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
