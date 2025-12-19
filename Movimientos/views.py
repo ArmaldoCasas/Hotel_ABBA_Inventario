@@ -39,20 +39,36 @@ def ingreso(request, ingreso_id=None):
                 return render(request, 'movimientos/ingresos/ingreso.html', {
                     'form_ingreso': form_ingreso if 'form_ingreso' in locals() else IngresoForm(),
                     'movimientos': movimientos_temp,
-                    'ingreso_id': request.session.get('ingreso_id'),
+                    'datos_guardados': bool(request.session.get('ingreso_temp')),
                     'error': 'Debe agregar al menos 1 producto antes de guardar el ingreso.',
                 })
             
             # verificar permisos antes de guardar ingreso
             if 14 not in request.session.get('permisos', []):
                 return redirect('listado_movimientos')
-            # Guardar ingreso y movimientos en DB
-            ingreso_id = request.session.get('ingreso_id')
-            if ingreso_id:
-                ingreso = Ingreso.objects.get(id=ingreso_id)
-            else:
-                return redirect('ingreso')  # No ingreso_id, algo salió mal, regresar
-
+            
+            # Obtener datos de sesión
+            ingreso_temp = request.session.get('ingreso_temp')
+            if not ingreso_temp:
+                return redirect('ingreso')  # No hay datos, algo salió mal
+            
+            # Crear ingreso con datos de sesión
+            ingreso = Ingreso(
+                proveedor_id=ingreso_temp['proveedor_id'],
+                tipo_documento=ingreso_temp['tipo_documento'],
+                numero_documento=ingreso_temp['numero_documento']
+            )
+            # Asignar el usuario logueado
+            user_id = request.session.get('user_id')
+            if user_id:
+                try:
+                    usuario = Usuarios.objects.get(id=user_id)
+                    ingreso.usuario = usuario
+                except Usuarios.DoesNotExist:
+                    pass
+            ingreso.save()
+            
+            # Crear movimientos
             for mov in movimientos_temp:
                 movimiento = MovimientoIngreso()
                 movimiento.ingreso = ingreso
@@ -66,7 +82,8 @@ def ingreso(request, ingreso_id=None):
                 producto.save()
             # Limpiar session
             request.session['movimientos_temp'] = []
-            request.session['ingreso_id'] = None
+            del request.session['ingreso_temp']
+            request.session.modified = True
             return redirect('listado_movimientos')
 
         elif 'eliminar_producto_ingreso' in request.POST:
@@ -87,55 +104,87 @@ def ingreso(request, ingreso_id=None):
             indice = request.POST.get('indice')
             cantidad = request.POST.get('cantidad')
             precio_unitario = request.POST.get('precio_unitario')
+            error_edicion = None
+            
             if indice and cantidad and precio_unitario:
                 try:
                     movimientos_temp = request.session.get('movimientos_temp', [])
-                    movimientos_temp[int(indice)]['cantidad'] = float(cantidad)
-                    movimientos_temp[int(indice)]['precio_unitario'] = float(precio_unitario)
-                    request.session['movimientos_temp'] = movimientos_temp
-                    request.session.modified = True
+                    indice_int = int(indice)
+                    cantidad_float = float(cantidad)
+                    precio_float = float(precio_unitario)
+                    
+                    # Validar que los valores sean positivos
+                    if cantidad_float <= 0:
+                        error_edicion = 'La cantidad debe ser un número positivo mayor que 0.'
+                    elif precio_float <= 0:
+                        error_edicion = 'El precio unitario debe ser un número positivo mayor que 0.'
+                    else:
+                        # Si son válidos, actualizar
+                        movimientos_temp[indice_int]['cantidad'] = cantidad_float
+                        movimientos_temp[indice_int]['precio_unitario'] = precio_float
+                        request.session['movimientos_temp'] = movimientos_temp
+                        request.session.modified = True
+                        return redirect('ingreso')
                 except (IndexError, ValueError):
-                    pass
+                    error_edicion = 'Error al procesar la edición. Intente nuevamente.'
+            
+            # Si hay error, mostrar la página con el error
+            if error_edicion:
+                ingreso_temp = request.session.get('ingreso_temp')
+                return render(request, 'movimientos/ingresos/ingreso.html', {
+                    'form_ingreso': IngresoForm(initial={
+                        'proveedor': ingreso_temp.get('proveedor_id'),
+                        'tipo_documento': ingreso_temp.get('tipo_documento'),
+                        'numero_documento': ingreso_temp.get('numero_documento'),
+                    }) if ingreso_temp else IngresoForm(),
+                    'movimientos': movimientos_temp,
+                    'datos_guardados': bool(request.session.get('ingreso_temp')),
+                    'error': error_edicion,
+                })
             return redirect('ingreso')
 
         elif 'guardar_datos_ingreso' in request.POST:
-            # Crear y guardar ingreso en DB para obtener ingreso_id inmediato
+            # Validar y guardar datos temporales en sesión
             form_ingreso = IngresoForm(request.POST)
             if form_ingreso.is_valid():
-                ingreso = form_ingreso.save(commit=False)
-                # Asignar el usuario logueado
-                user_id = request.session.get('user_id')
-                if user_id:
-                    try:
-                        usuario = Usuarios.objects.get(id=user_id)
-                        ingreso.usuario = usuario
-                    except Usuarios.DoesNotExist:
-                        pass
-                ingreso.save()
-                request.session['ingreso_id'] = ingreso.id
+                # Guardar solo IDs en sesión (son serializables)
+                request.session['ingreso_temp'] = {
+                    'proveedor_id': form_ingreso.cleaned_data['proveedor'].id,
+                    'tipo_documento': form_ingreso.cleaned_data['tipo_documento'],
+                    'numero_documento': form_ingreso.cleaned_data['numero_documento'],
+                }
                 request.session.modified = True
-                return redirect('movimiento_ingreso', ingreso_id=ingreso.id)
+                return redirect('movimiento_ingreso')
+            else:
+                # Si no válido, render con errores
+                return render(request, 'movimientos/ingresos/ingreso.html', {
+                    'form_ingreso': form_ingreso,
+                    'movimientos': movimientos_temp,
+                    'datos_guardados': bool(request.session.get('ingreso_temp')),
+                    'error': None,
+                })
         else:
             form_ingreso = IngresoForm()
     else:
-        ingreso_id = request.session.get('ingreso_id')
-        if ingreso_id:
-            try:
-                ingreso_instance = Ingreso.objects.get(id=ingreso_id)
-                form_ingreso = IngresoForm(instance=ingreso_instance)
-            except Ingreso.DoesNotExist:
-                form_ingreso = IngresoForm()
+        ingreso_temp = request.session.get('ingreso_temp')
+        if ingreso_temp:
+            # Reconstruir form con datos de sesión
+            form_ingreso = IngresoForm(initial={
+                'proveedor': ingreso_temp.get('proveedor_id'),
+                'tipo_documento': ingreso_temp.get('tipo_documento'),
+                'numero_documento': ingreso_temp.get('numero_documento'),
+            })
         else:
             form_ingreso = IngresoForm()
 
     return render(request, 'movimientos/ingresos/ingreso.html', {
         'form_ingreso': form_ingreso,
         'movimientos': movimientos_temp,
-        'ingreso_id': request.session.get('ingreso_id'),
+        'datos_guardados': bool(request.session.get('ingreso_temp')),
         'error': None,
     })
 
-def movimiento_ingreso(request, ingreso_id):
+def movimiento_ingreso(request):
     # verificar que el usuario este logueado
     if not request.session.get('user_id'):
         return redirect('login')
@@ -171,6 +220,7 @@ def movimiento_ingreso(request, ingreso_id):
             request.session['movimientos_temp'] = movimientos_temp
             request.session.modified = True
             return redirect('ingreso')
+        # Si no válido, continúa al render con el form que tiene errores
     else:
         form_movimiento = MovimientoIngresoForm()
     return render(request, 'movimientos/ingresos/movimiento_ingreso.html', {
@@ -204,12 +254,26 @@ def salida(request):
                     'error': 'Debe agregar al menos 1 producto antes de guardar la salida.',
                 })
             
-            salida_id = request.session.get('salida_id')
-            if salida_id:
-                salida = Salida.objects.get(id=salida_id)
-            else:
-                return redirect('salida')
+            # Obtener datos de sesión
+            salida_temp = request.session.get('salida_temp')
+            if not salida_temp:
+                return redirect('salida')  # No hay datos, algo salió mal
             
+            # Crear salida con datos de sesión
+            salida = Salida(
+                motivo=salida_temp['motivo']
+            )
+            # Asignar el usuario logueado
+            user_id = request.session.get('user_id')
+            if user_id:
+                try:
+                    usuario = Usuarios.objects.get(id=user_id)
+                    salida.usuario = usuario
+                except Usuarios.DoesNotExist:
+                    pass
+            salida.save()
+            
+            # Crear movimientos
             for mov in movimientos_salida_temp:
                 movimiento = MovimientoSalida()
                 movimiento.salida = salida
@@ -220,10 +284,10 @@ def salida(request):
                 producto = Producto.objects.get(id=mov['producto_id'])
                 producto.stock -= mov['cantidad']
                 producto.save()
-
             # Limpiar session
             request.session['movimientos_salida_temp'] = []
-            request.session['salida_id'] = None
+            del request.session['salida_temp']
+            request.session.modified = True
             return redirect('listado_movimientos')
 
         elif 'eliminar_producto_salida' in request.POST:
@@ -243,49 +307,84 @@ def salida(request):
             # Editar producto existente en la lista temporal
             indice = request.POST.get('indice')
             cantidad = request.POST.get('cantidad')
+            error_edicion = None
+            
             if indice and cantidad:
                 try:
                     movimientos_salida_temp = request.session.get('movimientos_salida_temp', [])
-                    movimientos_salida_temp[int(indice)]['cantidad'] = float(cantidad)
-                    request.session['movimientos_salida_temp'] = movimientos_salida_temp
-                    request.session.modified = True
+                    indice_int = int(indice)
+                    cantidad_float = float(cantidad)
+                    
+                    # Validar que la cantidad sea un entero
+                    if cantidad_float != int(cantidad_float):
+                        error_edicion = 'La cantidad debe ser un número entero.'
+                    # Validar que la cantidad sea positiva
+                    elif cantidad_float <= 0:
+                        error_edicion = 'La cantidad debe ser un número positivo mayor que 0.'
+                    else:
+                        # Obtener el producto de la sesión
+                        movimiento = movimientos_salida_temp[indice_int]
+                        producto = Producto.objects.get(id=movimiento['producto_id'])
+                        
+                        # Validar stock disponible
+                        if cantidad_float > producto.stock:
+                            error_edicion = f'La cantidad solicitada ({int(cantidad_float)}) supera el stock disponible ({producto.stock}) del producto {producto.nombre}.'
+                        else:
+                            # Si es válido, actualizar
+                            movimientos_salida_temp[indice_int]['cantidad'] = int(cantidad_float)
+                            request.session['movimientos_salida_temp'] = movimientos_salida_temp
+                            request.session.modified = True
+                            return redirect('salida')
                 except (IndexError, ValueError):
-                    pass
+                    error_edicion = 'Error al procesar la edición. Intente nuevamente.'
+                except Producto.DoesNotExist:
+                    error_edicion = 'El producto no existe. Intente nuevamente.'
+            
+            # Si hay error, mostrar la página con el error
+            if error_edicion:
+                return render(request, 'movimientos/salidas/salida.html', {
+                    'form_salida': SalidaForm(initial={
+                        'motivo': request.session.get('salida_temp', {}).get('motivo', ''),
+                    }) if request.session.get('salida_temp') else SalidaForm(),
+                    'movimientos': movimientos_salida_temp,
+                    'datos_guardados': bool(request.session.get('salida_temp')),
+                    'error': error_edicion,
+                })
             return redirect('salida')
 
         elif 'guardar_datos_salida' in request.POST:
+            # Validar y guardar datos temporales en sesión
             form_salida = SalidaForm(request.POST)
             if form_salida.is_valid():
-                salida = form_salida.save(commit=False)
-                # Asignar el usuario logueado
-                user_id = request.session.get('user_id')
-                if user_id:
-                    try:
-                        usuario = Usuarios.objects.get(id=user_id)
-                        salida.usuario = usuario
-                    except Usuarios.DoesNotExist:
-                        pass
-                salida.save()
-                request.session['salida_id'] = salida.id
+                # Guardar motivo en sesión
+                request.session['salida_temp'] = {
+                    'motivo': form_salida.cleaned_data['motivo'],
+                }
                 request.session.modified = True
                 return redirect('movimiento_salida')
+            else:
+                # Si no válido, render con errores
+                return render(request, 'movimientos/salidas/salida.html', {
+                    'form_salida': form_salida,
+                    'movimientos': movimientos_salida_temp,
+                    'datos_guardados': bool(request.session.get('salida_temp')),
+                    'error': None,
+                })
         else:
             form_salida = SalidaForm()
     else:
-        salida_id = request.session.get('salida_id')
-        if salida_id:
-            try:
-                salida_instance = Salida.objects.get(id=salida_id)
-                form_salida = SalidaForm(instance=salida_instance)
-            except Salida.DoesNotExist:
-                form_salida = SalidaForm()
+        salida_temp = request.session.get('salida_temp')
+        if salida_temp:
+            form_salida = SalidaForm(initial={
+                'motivo': salida_temp.get('motivo'),
+            })
         else:
             form_salida = SalidaForm()
 
     return render(request, "movimientos/salidas/salida.html", {
         'form_salida': form_salida,
         'movimientos': movimientos_salida_temp,
-        'salida_id': request.session.get('salida_id'),
+        'datos_guardados': bool(request.session.get('salida_temp')),
         'error': None,
     })
 
@@ -311,21 +410,24 @@ def movimiento_salida(request):
             producto = form_movimiento.cleaned_data['producto']
             cantidad_val = float(form_movimiento.cleaned_data['cantidad'])
 
-            movimientos_salida_temp = request.session.get('movimientos_salida_temp', [])
-
+            # Validar que la cantidad sea un entero
+            if cantidad_val != int(cantidad_val):
+                form_movimiento.add_error('cantidad', 'La cantidad debe ser un número entero.')
             # Verificar si ya existe un movimiento para este producto en la salida actual
-            if any(mov.get('producto_id') == producto.id for mov in movimientos_salida_temp):
+            elif any(mov.get('producto_id') == producto.id for mov in request.session.get('movimientos_salida_temp', [])):
                 form_movimiento.add_error('producto', 'Ya existe un movimiento para este producto en la salida actual.')
             else:
                 movimiento_data = {
                     'producto_id': producto.id,
                     'producto_nombre': str(producto),
-                    'cantidad': cantidad_val,
+                    'cantidad': int(cantidad_val),
                 }
+                movimientos_salida_temp = request.session.get('movimientos_salida_temp', [])
                 movimientos_salida_temp.append(movimiento_data)
                 request.session['movimientos_salida_temp'] = movimientos_salida_temp
                 request.session.modified = True
                 return redirect('salida')
+        # Si no válido, continúa al render con el form que tiene errores
     else:
         form_movimiento = MovimientoSalidaForm()
 

@@ -6,7 +6,7 @@
   {{ error }}
 </div>
 {% endif %}
-{% if not ingreso_id %}
+{% if not datos_guardados %}
 <div class="alert alert-warning" role="alert">
   Para poder agregar productos, primero debe guardar los datos iniciales del
   ingreso haciendo clic en <strong>Guardar Datos</strong>.
@@ -31,9 +31,9 @@
     <div class="text-danger">{{ form_ingreso.numero_documento.errors }}</div>
     {% endif %}
   </div>
-  {% if ingreso_id and ingreso_id != None %}
+  {% if datos_guardados %}
   <a
-    href="{% url 'movimiento_ingreso' ingreso_id=ingreso_id %}"
+    href="{% url 'movimiento_ingreso' %}"
     class="btn btn-primary mb-3"
     >Agregar producto</a
   >
