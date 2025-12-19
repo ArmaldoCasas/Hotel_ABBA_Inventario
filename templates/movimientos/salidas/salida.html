@@ -6,7 +6,7 @@
   {{ error }}
 </div>
 {% endif %}
-{% if not salida_id %}
+{% if not datos_guardados %}
 <div class="alert alert-warning" role="alert">
   Para poder agregar productos, primero debe guardar los datos iniciales de la
   salida haciendo clic en <strong>Guardar Datos</strong>.
@@ -21,7 +21,7 @@
     <div class="text-danger">{{ form_salida.motivo.errors }}</div>
     {% endif %}
   </div>
-  {% if salida_id and salida_id != None %}
+  {% if datos_guardados %}
   <a href="{% url 'movimiento_salida' %}" class="btn btn-primary mb-3"
     >Agregar producto</a
   >
