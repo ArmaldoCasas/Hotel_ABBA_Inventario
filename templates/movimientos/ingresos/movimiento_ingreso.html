@@ -1,12 +1,34 @@
 {% extends "base.html" %}
-{% block title %}Productos Ingresados - Hotel ABBA{% endblock %}
+{% block title %}Agregar Producto - Hotel ABBA{% endblock %}
 {% block content %}
 
 <div class="main-content">
-  <h1>Productos Ingresados</h1>
-  <form method="post">{% csrf_token %}
-    {{ form_movimiento.as_p }}
+  <h1>Agregar Producto al Ingreso</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="{{ form_movimiento.producto.id_for_label }}" class="form-label">Producto</label>
+      {{ form_movimiento.producto }}
+      {% if form_movimiento.producto.errors %}
+        <div class="text-danger">{{ form_movimiento.producto.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="mb-3">
+      <label for="{{ form_movimiento.cantidad.id_for_label }}" class="form-label">Cantidad</label>
+      {{ form_movimiento.cantidad }}
+      {% if form_movimiento.cantidad.errors %}
+        <div class="text-danger">{{ form_movimiento.cantidad.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="mb-3">
+      <label for="{{ form_movimiento.precio_unitario.id_for_label }}" class="form-label">Precio Unitario</label>
+      {{ form_movimiento.precio_unitario }}
+      {% if form_movimiento.precio_unitario.errors %}
+        <div class="text-danger">{{ form_movimiento.precio_unitario.errors }}</div>
+      {% endif %}
+    </div>
     <button class="btn btn-primary" type="submit">Guardar Producto</button>
+    <a href="{% url 'ingreso' %}" class="btn btn-secondary">Cancelar</a>
   </form>
 </div>
 

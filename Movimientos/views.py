@@ -192,40 +192,60 @@ def movimiento_ingreso(request):
     if 14 not in request.session.get('permisos', []):
         return redirect('listado_movimientos')
     
-    # Limpiar session previa movimientos para evitar Decimal no serializable
-    if 'movimientos_temp' not in request.session or not request.session['movimientos_temp']:
-        request.session['movimientos_temp'] = []
-    else:
-        # Asegurar convertir precios a float en movimientos ya guardados
-        movimientos_temp = request.session.get('movimientos_temp', [])
-        for mov in movimientos_temp:
-            if isinstance(mov.get('precio_unitario'), float):
-                continue
-            mov['precio_unitario'] = float(mov.get('precio_unitario'))
-        request.session['movimientos_temp'] = movimientos_temp
-        request.session.modified = True
-    
-    # Procesar formulario de nuevo movimiento
-    if request.method == 'POST':
-        form_movimiento = MovimientoIngresoForm(request.POST)
-        if form_movimiento.is_valid():
-            movimiento_data = {
-                'producto_id': form_movimiento.cleaned_data['producto'].id,
-                'producto_nombre': str(form_movimiento.cleaned_data['producto']),
-                'cantidad': float(form_movimiento.cleaned_data['cantidad']),
-                'precio_unitario': float(form_movimiento.cleaned_data['precio_unitario']),
-            }
+    try:
+        # Si no hay ingreso_temp en sesión, regresar a ingreso
+        ingreso_temp = request.session.get('ingreso_temp')
+        if not ingreso_temp:
+            return redirect('ingreso')
+        
+        # Obtener el proveedor_id de la sesión
+        proveedor_id = ingreso_temp.get('proveedor_id')
+        print(f"DEBUG: proveedor_id = {proveedor_id}")
+        print(f"DEBUG: ingreso_temp = {ingreso_temp}")
+        
+        # Limpiar session previa movimientos para evitar Decimal no serializable
+        if 'movimientos_temp' not in request.session or not request.session['movimientos_temp']:
+            request.session['movimientos_temp'] = []
+        else:
+            # Asegurar convertir precios a float en movimientos ya guardados
             movimientos_temp = request.session.get('movimientos_temp', [])
-            movimientos_temp.append(movimiento_data)
+            for mov in movimientos_temp:
+                if isinstance(mov.get('precio_unitario'), float):
+                    continue
+                mov['precio_unitario'] = float(mov.get('precio_unitario'))
             request.session['movimientos_temp'] = movimientos_temp
             request.session.modified = True
-            return redirect('ingreso')
-        # Si no válido, continúa al render con el form que tiene errores
-    else:
-        form_movimiento = MovimientoIngresoForm()
-    return render(request, 'movimientos/ingresos/movimiento_ingreso.html', {
-        'form_movimiento': form_movimiento,
-    })
+        
+        # Procesar formulario de nuevo movimiento
+        if request.method == 'POST':
+            form_movimiento = MovimientoIngresoForm(request.POST, proveedor_id=proveedor_id)
+            if form_movimiento.is_valid():
+                movimiento_data = {
+                    'producto_id': form_movimiento.cleaned_data['producto'].id,
+                    'producto_nombre': str(form_movimiento.cleaned_data['producto']),
+                    'cantidad': float(form_movimiento.cleaned_data['cantidad']),
+                    'precio_unitario': float(form_movimiento.cleaned_data['precio_unitario']),
+                }
+                movimientos_temp = request.session.get('movimientos_temp', [])
+                movimientos_temp.append(movimiento_data)
+                request.session['movimientos_temp'] = movimientos_temp
+                request.session.modified = True
+                return redirect('ingreso')
+            # Si no válido, continúa al render con el form que tiene errores
+        else:
+            form_movimiento = MovimientoIngresoForm(proveedor_id=proveedor_id)
+            # Debug: mostrar cantidad de productos en el queryset
+            print(f"DEBUG: Total productos en queryset = {form_movimiento.fields['producto'].queryset.count()}")
+        
+        return render(request, 'movimientos/ingresos/movimiento_ingreso.html', {
+            'form_movimiento': form_movimiento,
+        })
+    except Exception as e:
+        # Si ocurre cualquier error, redirigir a ingreso
+        print(f"Error en movimiento_ingreso: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return redirect('ingreso')
 
 
 def salida(request):
