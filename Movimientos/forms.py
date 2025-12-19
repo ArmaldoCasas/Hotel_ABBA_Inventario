@@ -46,6 +46,42 @@ class MovimientoIngresoForm(forms.ModelForm):
             'precio_unitario': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio unitario'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        # Extraer proveedor_id de kwargs
+        proveedor_id = kwargs.pop('proveedor_id', None)
+        super().__init__(*args, **kwargs)
+        
+        print(f"DEBUG FormInit: proveedor_id = {proveedor_id} (type: {type(proveedor_id)})")
+        
+        # Siempre inicializar con productos activos como base segura
+        try:
+            if proveedor_id:
+                # Filtrar por proveedor si se proporciona
+                # La relación es ManyToMany a través de ProveedorProducto
+                queryset = Producto.objects.filter(
+                    proveedores__id=proveedor_id,
+                    esta_activo=True
+                ).distinct().order_by('nombre')
+                print(f"DEBUG FormInit: Productos por proveedor (id={proveedor_id}) = {queryset.count()}")
+                for p in queryset[:5]:  # Debug: mostrar primeros 5 productos
+                    print(f"  - {p.nombre}")
+                self.fields['producto'].queryset = queryset
+            else:
+                # Si no hay proveedor, mostrar todos los productos activos
+                queryset = Producto.objects.filter(
+                    esta_activo=True
+                ).order_by('nombre')
+                print(f"DEBUG FormInit: Todos los productos = {queryset.count()}")
+                self.fields['producto'].queryset = queryset
+        except Exception as e:
+            # En caso de error, asegurar un queryset válido
+            print(f"DEBUG FormInit: Error - {str(e)}")
+            import traceback
+            traceback.print_exc()
+            self.fields['producto'].queryset = Producto.objects.filter(
+                esta_activo=True
+            ).order_by('nombre')
+
     def clean_cantidad(self):
         cantidad = self.cleaned_data.get('cantidad')
         if cantidad in (None, ''):
